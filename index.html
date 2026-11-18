@@ -52,6 +52,7 @@ textarea.caption{width:100%;border:2px solid #ece8f4;font:inherit;resize:vertica
 .hidden{display:none!important}
 .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.thumbs div{position:relative;width:72px;height:72px}.thumbs img{width:100%;height:100%;object-fit:cover;border-radius:12px}
 .thumbs b{position:absolute;top:-7px;inset-inline-end:-7px;background:#d6336c;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;cursor:pointer;font-size:13px}
+.thumbs div.sel img{outline:3px solid #ff5a36;outline-offset:2px}
 .linkbtn{background:none;border:0;color:#6e6b85;text-decoration:underline;cursor:pointer;font:inherit;font-size:13px;margin-top:12px;padding:0;display:block}
 .orgrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.orgrow img{width:48px;height:48px;border-radius:50%;object-fit:contain;background:#fff;border:1px solid #ddd}
 .orgrow .btn{width:auto;margin-top:0;padding:12px 16px}
@@ -347,7 +348,7 @@ let lang=(()=>{try{const v=localStorage.getItem("diwan_lang");return["ar","fr","
 const t=k=>L[lang][k];
 const data={mode:"solo",event:"",country:"DZ",otherRole:"",custom:"",name:"",wil:-1,age:-1,gender:-1,roles:[],work:"",slogan:-1};
 let tpl=0,manualTpl=false;
-let orgLogo=null,orgData="";const timgs=[];
+let orgLogo=null,orgData="";const timgs=[];let tsel=0,cellRects=[];
 const PROF="diwan_profile";
 const selRoles=new Set();
 
@@ -394,20 +395,23 @@ function syncMode(){
   $("lblName").dataset.i=tm?"lNameTeam":"lName";$("fName").dataset.p=tm?"pNameTeam":"pName";
   $("personalFields").classList.toggle("hidden",tm);
   $("modes").innerHTML=[["solo","modeSolo"],["team","modeTeam"]].map(([k,n])=>`<span class="chip${k===data.mode?" on":""}" data-m="${k}">${t(n)}</span>`).join("");
-  $("zoomWrap").classList.toggle("hidden",tm);$("soloRow").classList.toggle("hidden",tm);$("teamBox").classList.toggle("hidden",!tm);
+  $("pick").classList.toggle("hidden",tm);$("teamBox").classList.toggle("hidden",!tm);
   drawTeamThumbs();
 }
 function drawTeamThumbs(){
-  $("teamThumbs").innerHTML=timgs.map((im,i)=>`<div><img src="${im.src}" alt=""><b data-k="${i}">×</b></div>`).join("");
+  if(tsel>=timgs.length)tsel=Math.max(0,timgs.length-1);
+  $("teamThumbs").innerHTML=timgs.map((im,i)=>`<div data-s="${i}" class="${i===tsel&&timgs.length>1?"sel":""}"><img src="${im.src}" alt=""><b data-k="${i}">×</b></div>`).join("");
   $("teamAdd").style.display=timgs.length>=4?"none":"";
 }
 $("modes").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;data.mode=c.dataset.m;applyLang()};
 $("teamAdd").onclick=()=>$("teamFile").click();
 $("teamFile").onchange=e=>{
   const fs=[...e.target.files].slice(0,4-timgs.length);e.target.value="";
-  fs.forEach(f=>{const i=new Image();i.onload=()=>{if(timgs.length<4){timgs.push(i);$("e2").textContent="";drawTeamThumbs();draw();renderThumbs()}};i.src=URL.createObjectURL(f)});
+  fs.forEach(f=>{const i=new Image();i.onload=()=>{if(timgs.length<4){i._z=1;i._r=0;i._ox=0;i._oy=0;timgs.push(i);tsel=timgs.length-1;$("zoom").value=1;$("e2").textContent="";drawTeamThumbs();draw();renderThumbs()}};i.src=URL.createObjectURL(f)});
 };
-$("teamThumbs").onclick=e=>{const b=e.target.closest("b");if(!b)return;timgs.splice(+b.dataset.k,1);drawTeamThumbs();draw();renderThumbs()};
+$("teamThumbs").onclick=e=>{const b=e.target.closest("b");
+  if(b){timgs.splice(+b.dataset.k,1);drawTeamThumbs();$("zoom").value=getZ();draw();renderThumbs();return}
+  const d=e.target.closest("div[data-s]");if(d){tsel=+d.dataset.s;drawTeamThumbs();$("zoom").value=getZ();draw()}};
 
 /* شعار الجمعية */
 function setOrgLogo(im,url){orgLogo=im;orgData=url||"";const pv=$("orgPrev");
@@ -763,12 +767,21 @@ function enhDraw(fn){
   fn();
   ctx.save();ctx.globalCompositeOperation="screen";ctx.globalAlpha=.38;fn();
   ctx.globalCompositeOperation="soft-light";ctx.globalAlpha=.7;fn();ctx.restore()}
-function collage(PB){
-  ctx.fillStyle="#ffffff";ctx.fillRect(PB.x,PB.y,PB.w,PB.h);
-  const n=timgs.length,g=8,x=PB.x,y=PB.y,w=PB.w,h=PB.h,hw=(w-g)/2,hh=(h-g)/2;
+function bgBlur(im){if(!im._b){const c=document.createElement("canvas"),q=24;c.width=q;c.height=Math.max(1,Math.round(q*im.height/im.width));c.getContext("2d").drawImage(im,0,0,c.width,c.height);im._b=c}return im._b}
+function coverBlur(im,x,y,w,h,dark){const bb=bgBlur(im),k=Math.max(w/bb.width,h/bb.height),bw=bb.width*k,bh=bb.height*k;
+  ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.imageSmoothingEnabled=true;ctx.drawImage(bb,x+(w-bw)/2,y+(h-bh)/2,bw,bh);ctx.fillStyle="rgba(0,0,0,"+dark+")";ctx.fillRect(x,y,w,h);ctx.restore()}
+function collage(PB,shape){
+  coverBlur(timgs[0],PB.x,PB.y,PB.w,PB.h,.45);
+  const L=shape==="circle"?[BOX.x+117,BOX.y+100,566,566]:shape==="hex"?[BOX.x+150,BOX.y+90,500,640]:(shape==="arch"||shape==="horse")?[BOX.x+60,BOX.y+190,680,540]:[BOX.x+20,BOX.y+20,760,710];
+  const n=timgs.length,g=10,[x,y,w,h]=L,hw=(w-g)/2,hh=(h-g)/2;
   const R=n===1?[[x,y,w,h]]:n===2?[[x,y,hw,h],[x+hw+g,y,hw,h]]:n===3?[[x,y,hw,h],[x+hw+g,y,hw,hh],[x+hw+g,y+hh+g,hw,hh]]:[[x,y,hw,hh],[x+hw+g,y,hw,hh],[x,y+hh+g,hw,hh],[x+hw+g,y+hh+g,hw,hh]];
-  R.forEach((r,i)=>{const im=timgs[i],k=Math.max(r[2]/im.width,r[3]/im.height),cw=r[2]/k,ch=r[3]/k;
-    ctx.drawImage(im,(im.width-cw)/2,(im.height-ch)*.3,cw,ch,r[0],r[1],r[2],r[3])});
+  R.forEach((r,i)=>{const im=timgs[i];
+    ctx.save();ctx.beginPath();ctx.roundRect(r[0],r[1],r[2],r[3],16);ctx.clip();
+    coverBlur(im,r[0],r[1],r[2],r[3],.2);
+    const rq=im._r||0,sw=rq%2,w0=sw?im.height:im.width,h0=sw?im.width:im.height,k=Math.min(r[2]/w0,r[3]/h0)*(im._z||1);
+    ctx.translate(r[0]+r[2]/2+(im._ox||0),r[1]+r[3]/2+(im._oy||0));ctx.rotate(rq*Math.PI/2);ctx.drawImage(im,-im.width*k/2,-im.height*k/2,im.width*k,im.height*k);ctx.restore();
+    ctx.save();const on=(n>1&&i===tsel&&ctx===mainCtx);ctx.lineWidth=on?6:3;ctx.strokeStyle=on?"#ffd23f":"rgba(255,255,255,.9)";ctx.beginPath();ctx.roundRect(r[0],r[1],r[2],r[3],16);ctx.stroke();ctx.restore()});
+  if(ctx===mainCtx)cellRects=R;
 }
 function eventRibbon(T){
   if(!data.event)return;
@@ -785,7 +798,7 @@ function frame(T){
   if(T.glow){ctx.save();shapePath(T.shape);ctx.shadowColor=rgba(T.glow,.95);ctx.shadowBlur=70*SC;ctx.lineWidth=30;ctx.strokeStyle=T.glow;ctx.stroke();ctx.restore()}
   ctx.save();shapePath(T.shape);ctx.clip();
   if(isTeam()&&timgs.length){
-    enhDraw(()=>collage(T.shape==="horse"?{x:BOX.x-26,y:BOX.y,w:BOX.w+52,h:BOX.h}:BOX));
+    enhDraw(()=>collage(T.shape==="horse"?{x:BOX.x-26,y:BOX.y,w:BOX.w+52,h:BOX.h}:BOX,T.shape));
   }else if(img&&!isTeam()){
     const PB=T.shape==="horse"?{x:BOX.x-26,y:BOX.y,w:BOX.w+52,h:BOX.h}:BOX;
     const odd=rot%2===1,iw=odd?img.height:img.width,ih=odd?img.width:img.height;
@@ -873,25 +886,32 @@ $("file").onchange=e=>{
   i.onload=()=>{img=i;zoom=1;rot=0;ox=oy=0;$("zoom").value=1;$("e2").textContent="";$("pick").textContent=t("pick2");draw();renderThumbs()};
   i.src=u;
 };
-$("rotBtn").onclick=()=>{if(!img)return;rot=(rot+1)%4;ox=oy=0;draw();renderThumbs()};
+$("rotBtn").onclick=()=>{if(isTeam()){const m=timgs[tsel];if(!m)return;m._r=((m._r||0)+1)%4;m._ox=m._oy=0;draw();renderThumbs();return}if(!img)return;rot=(rot+1)%4;ox=oy=0;draw();renderThumbs()};
 $("enh").onchange=e=>{enhOn=e.target.checked;draw();renderThumbs()};
-$("zoom").oninput=e=>{zoom=+e.target.value;draw()};
+$("zoom").oninput=e=>{if(isTeam()){const m=timgs[tsel];if(m){m._z=+e.target.value;draw()}return}zoom=+e.target.value;draw()};
 let drag=null,pinch=null;const ptrs=new Map();
 const kk=()=>cv.width/cv.getBoundingClientRect().width;
-const setZoom=z=>{zoom=Math.max(1,Math.min(3,z));$("zoom").value=zoom;draw()};
+const hasT=()=>isTeam()?!!timgs[tsel]:!!img;
+const getZ=()=>isTeam()?((timgs[tsel]&&timgs[tsel]._z)||1):zoom;
+const getO=()=>isTeam()?[(timgs[tsel]&&timgs[tsel]._ox)||0,(timgs[tsel]&&timgs[tsel]._oy)||0]:[ox,oy];
+const setO=(a,b)=>{if(isTeam()){const m=timgs[tsel],r=cellRects[tsel];if(!m)return;const lx=r?r[2]/2:300,ly=r?r[3]/2:300;m._ox=Math.max(-lx,Math.min(lx,a));m._oy=Math.max(-ly,Math.min(ly,b))}else{ox=a;oy=b}};
+const setZoom=z=>{z=Math.max(1,Math.min(3,z));if(isTeam()){const m=timgs[tsel];if(m)m._z=z}else zoom=z;$("zoom").value=z;draw()};
 cv.addEventListener("pointerdown",e=>{
   const hi=stkHit(e);if(hi>=0){stkSel=hi;sdrag={i:hi,x:e.clientX,y:e.clientY,sx:stks[hi].x,sy:stks[hi].y};cv.setPointerCapture(e.pointerId);stkUI();draw();return}
-  if(!img||isTeam())return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});cv.setPointerCapture(e.pointerId);
-  if(ptrs.size===1){drag={x:e.clientX,y:e.clientY,ox,oy};cv.style.cursor="grabbing"}
-  else if(ptrs.size===2){const [p,q]=[...ptrs.values()];pinch={d:Math.hypot(p.x-q.x,p.y-q.y)||1,z:zoom};drag=null}});
+  if(isTeam()&&timgs.length>1&&ptrs.size===0){const r=cv.getBoundingClientRect(),k=cv.width/r.width,x=(e.clientX-r.left)*k,y=(e.clientY-r.top)*k;
+    const c=cellRects.findIndex(q=>x>=q[0]&&x<=q[0]+q[2]&&y>=q[1]&&y<=q[1]+q[3]);if(c>=0&&c!==tsel){tsel=c;$("zoom").value=getZ();drawTeamThumbs();draw()}}
+  if(!hasT())return;
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});cv.setPointerCapture(e.pointerId);
+  if(ptrs.size===1){const [a,b]=getO();drag={x:e.clientX,y:e.clientY,ox:a,oy:b};cv.style.cursor="grabbing"}
+  else if(ptrs.size===2){const [p,q]=[...ptrs.values()];pinch={d:Math.hypot(p.x-q.x,p.y-q.y)||1,z:getZ()};drag=null}});
 cv.addEventListener("pointermove",e=>{
   if(sdrag){const o=stks[sdrag.i],k=kk();o.x=Math.max(30,Math.min(1050,sdrag.sx+(e.clientX-sdrag.x)*k));o.y=Math.max(150,Math.min(1300,sdrag.sy+(e.clientY-sdrag.y)*k));draw();return}
   if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(ptrs.size===2&&pinch){const [p,q]=[...ptrs.values()];setZoom(pinch.z*Math.hypot(p.x-q.x,p.y-q.y)/pinch.d)}
-  else if(drag&&ptrs.size===1){ox=drag.ox+(e.clientX-drag.x)*kk();oy=drag.oy+(e.clientY-drag.y)*kk();draw()}});
-const endPtr=e=>{if(sdrag){sdrag=null;renderThumbs();return}ptrs.delete(e.pointerId);pinch=null;drag=null;if(ptrs.size===1){const [p]=[...ptrs.values()];drag={x:p.x,y:p.y,ox,oy}}cv.style.cursor="grab"};
+  else if(drag&&ptrs.size===1){setO(drag.ox+(e.clientX-drag.x)*kk(),drag.oy+(e.clientY-drag.y)*kk());draw()}});
+const endPtr=e=>{if(sdrag){sdrag=null;renderThumbs();return}ptrs.delete(e.pointerId);pinch=null;drag=null;if(ptrs.size===1){const [p]=[...ptrs.values()],[a,b]=getO();drag={x:p.x,y:p.y,ox:a,oy:b}}cv.style.cursor="grab";renderThumbs()};
 ["pointerup","pointercancel"].forEach(ev=>cv.addEventListener(ev,endPtr));
-cv.addEventListener("wheel",e=>{if(!img)return;e.preventDefault();setZoom(zoom*(e.deltaY<0?1.06:.94))},{passive:false});
+cv.addEventListener("wheel",e=>{if(!hasT())return;e.preventDefault();setZoom(getZ()*(e.deltaY<0?1.06:.94))},{passive:false});
 $("back1").onclick=()=>go(1);
 
 /* الخطوة 3 */
@@ -990,7 +1010,7 @@ $("share").onclick=async()=>{
 };
 $("back2").onclick=()=>go(2);
 $("newBtn").onclick=()=>{
-  img=null;zoom=1;rot=0;ox=oy=0;$("zoom").value=1;timgs.length=0;$("file").value="";$("teamFile").value="";enhOn=false;$("enh").checked=false;stks=[];stkSel=-1;blob=null;art=null;fmt="45";capV=0;capEdited=false;manualTpl=false;
+  img=null;zoom=1;rot=0;ox=oy=0;$("zoom").value=1;timgs.length=0;tsel=0;$("file").value="";$("teamFile").value="";enhOn=false;$("enh").checked=false;stks=[];stkSel=-1;blob=null;art=null;fmt="45";capV=0;capEdited=false;manualTpl=false;
   $("msg").classList.add("hidden");$("e1").textContent="";$("e2").textContent="";$("fConsent").checked=false;
   applyLang();go(1);
 };
