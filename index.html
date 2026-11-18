@@ -91,7 +91,7 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
 <section id="s1" class="card">
   <h2 data-i="c1h"></h2><p class="sub" data-i="c1sub"></p>
   <label data-i="lMode" style="margin-top:0"></label><div class="chips" id="modes"></div>
-  <label data-i="lName" id="lblName"></label><input type="text" id="fName" maxlength="40" data-p="pName">
+  <label data-i="lName" id="lblName"></label><input type="text" id="fName" maxlength="70" data-p="pName">
   <label data-i="lCountry"></label>
   <div class="cwrap"><select id="fCountry"></select><img id="flagPrev" alt="" class="hidden"></div>
   <div id="wilayaWrap"><label data-i="lWilaya"></label><select id="fWilaya"></select></div>
@@ -99,15 +99,15 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
   <label data-i="lAge"></label><select id="fAge"></select>
   <label data-i="lGender"></label><select id="fGender"></select>
   <label data-i="lRole"></label><div class="chips" id="roles"></div>
-  <input type="text" id="fOther" maxlength="30" class="hidden" data-p="pOther" style="margin-top:10px">
-  <label data-i="lWork"></label><input type="text" id="fWork" maxlength="45" data-p="pWork">
+  <input type="text" id="fOther" maxlength="60" class="hidden" data-p="pOther" style="margin-top:10px">
+  <label data-i="lWork"></label><input type="text" id="fWork" maxlength="90" data-p="pWork">
   </div>
-  <label data-i="lEvent"></label><input type="text" id="fEvent" maxlength="40" data-p="pEvent">
+  <label data-i="lEvent"></label><input type="text" id="fEvent" maxlength="70" data-p="pEvent">
   <label data-i="lOrgLogo"></label>
   <div class="orgrow"><button type="button" class="btn sec" id="orgPick" data-i="orgLogoPick"></button><img id="orgPrev" class="hidden" alt=""><button type="button" class="btn sec hidden" id="orgDel" data-i="orgLogoDel"></button></div>
   <input type="file" id="orgFile" accept="image/*" class="hidden">
   <label data-i="lSlogan"></label><select id="fSlogan"></select>
-  <label data-i="lCustom"></label><input type="text" id="fCustom" maxlength="40" data-p="pCustom">
+  <label data-i="lCustom"></label><input type="text" id="fCustom" maxlength="80" data-p="pCustom">
   <div class="ok" style="font-weight:600;font-size:13px;line-height:1.7" data-i="privacy"></div>
   <label class="consent"><input type="checkbox" id="fConsent"><span data-i="consent"></span></label>
   <div class="err" id="e1"></div>
@@ -868,7 +868,7 @@ $("back2").onclick=()=>go(2);
 
 applyLang();
 loadProfile();
-try{const ev=new URLSearchParams(location.search).get("event");if(ev)$("fEvent").value=ev.slice(0,40)}catch(e){}
+try{const ev=new URLSearchParams(location.search).get("event");if(ev)$("fEvent").value=ev.slice(0,70)}catch(e){}
 </script>
 </body>
 </html>
