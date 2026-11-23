@@ -424,14 +424,14 @@ function drawQrStrip(c,H,tc,m){const u=qrData(),q=qrGet(u);if(!q)return;const pa
   const side=ch-28,qx=cx+cw-14-side,qy=cy+14,n=q.size,mod=side/(n+4);
   c.fillStyle="#fff";c.fillRect(qx,qy,side,side);c.fillStyle=qrCol();
   for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.m[y][x])c.fillRect(Math.round(qx+(x+2)*mod),Math.round(qy+(y+2)*mod),Math.ceil(mod),Math.ceil(mod));
-  const tx=qx-22,tw=cw-side-14-22-28,nm=brand.name.trim(),disp=u.replace(/^https?:\/\//i,"").replace(/\/$/,"");
-  c.save();c.textBaseline="alphabetic";c.textAlign="right";c.direction="ltr";
+  const tx=qx-44,tw=cw-side-14-44-30,nm=brand.name.trim().replace(/\s+([.,،؛:!?])/g,"$1"),disp=u.replace(/^https?:\/\//i,"").replace(/\/$/,"");
+  c.save();c.beginPath();c.rect(cx+14,cy,tx-cx-14,ch);c.clip();c.textBaseline="alphabetic";c.textAlign="left";c.direction="ltr";const put=(txt,yy)=>{const w=c.measureText(txt).width;c.fillText(txt,tx-6-w,yy)};
   let lines=[],ns=0,nlh=0;
-  if(nm){const F=z=>mc.font=`800 ${z}px Cairo,Tahoma,sans-serif`;for(let z=38;z>=22;z-=2){F(z);lines=wrapT(nm,tw);if(lines.length<=2)break}ns=mc.font&&parseInt(mc.font.match(/(\d+)px/)[1]);if(lines.length>2){lines=lines.slice(0,2);lines[1]=lines[1].replace(/\s*\S*$/,"")+"…"}nlh=Math.round(ns*1.3)}
+  if(nm){const F=z=>mc.font=`800 ${z}px Cairo,Tahoma,sans-serif`;for(let z=38;z>=22;z-=2){F(z);lines=wrapT(nm,tw);if(lines.length<=2)break}ns=mc.font&&parseInt(mc.font.match(/(\d+)px/)[1]);if(lines.length>2){lines=lines.slice(0,2);lines[1]=lines[1].replace(/\s*\S*$/,"")+"…"}c.direction="rtl";for(;ns>16;ns-=2){c.font=`800 ${ns}px Cairo,Tahoma,sans-serif`;if(Math.max(...lines.map(l=>c.measureText(l).width))<=tw*.9)break}c.direction="ltr";nlh=Math.round(ns*1.3)}
   const ls=fitText(c,disp,tw,26,13,700),hs=22,total=lines.length*nlh+(lines.length?10:0)+ls+14+hs;let y=cy+ch/2-total/2;
-  if(lines.length){c.font=`800 ${ns}px Cairo,Tahoma,sans-serif`;c.fillStyle="#0b1b2e";for(const l of lines){y+=nlh*.8;c.fillText(l,tx,y);y+=nlh*.2}y+=10}
-  y+=ls*.8;c.font=`700 ${ls}px Cairo,Tahoma,sans-serif`;c.fillStyle="#1a5fb4";c.fillText(disp,tx,y);y+=ls*.2+14+hs*.8;
-  c.font=`600 ${hs}px Cairo,Tahoma,sans-serif`;c.fillStyle="#5b6b7d";c.fillText(t("qrHint"),tx,y);c.restore()}
+  if(lines.length){c.direction="rtl";c.font=`800 ${ns}px Cairo,Tahoma,sans-serif`;c.fillStyle="#0b1b2e";for(const l of lines){y+=nlh*.8;put(l,y);y+=nlh*.2}c.direction="ltr";y+=10}
+  y+=ls*.8;c.font=`700 ${ls}px Cairo,Tahoma,sans-serif`;c.fillStyle="#1a5fb4";put(disp,y);y+=ls*.2+14+hs*.8;
+  c.font=`600 ${hs}px Cairo,Tahoma,sans-serif`;c.fillStyle="#5b6b7d";put(t("qrHint"),y);c.restore()}
 function qrCol(){return lum(S.qrc)<.55?S.qrc:"#0b1b2e"}
 function drawQrCorner(c,H,m){if(!qrCor())return;const q=qrGet(qrData()),n=q.size,card=170,pd=12,side=card-2*pd,mod=side/(n+2),mm=Math.max(m,24),x=S.qrpos==="cr"?W0-mm-card:mm,y=H-mm-card;
   c.save();c.shadowColor="rgba(0,0,0,.28)";c.shadowBlur=12;c.shadowOffsetY=3;c.fillStyle="#fff";rr(c,x,y,card,card,18);c.fill();c.restore();c.fillStyle=qrCol();
