@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0f3d6e">
+<link rel="manifest" href="collage.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="الرفيق في النشر">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230f3d6e%27/%3E%3Crect x=%2712%27 y=%2712%27 width=%2719%27 height=%2724%27 rx=%274%27 fill=%27%23ff5a36%27/%3E%3Crect x=%2734%27 y=%2712%27 width=%2718%27 height=%2711%27 rx=%274%27 fill=%27%23fff%27/%3E%3Crect x=%2734%27 y=%2727%27 width=%2718%27 height=%2725%27 rx=%274%27 fill=%27%2310a88a%27/%3E%3Crect x=%2712%27 y=%2740%27 width=%2719%27 height=%2712%27 rx=%274%27 fill=%27%23fff%27/%3E%3C/svg%3E">
 <title>الرفيق في النشر</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -108,6 +113,7 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
     <div><b data-i="org"></b><small data-i="brandSub"></small></div>
   </div>
   
+  <button type="button" class="lang hidden" id="instBtn" style="margin-top:10px;background:#e8f7ee;border-color:#8fd3a8">📲 ثبّت البرنامج على جهازك</button>
   <button type="button" class="lang" id="guideBtn" data-i="gBtn" style="margin-top:10px;background:#fff7e6;border-color:#ffcf7a"></button>
   <h1 data-i="h1"></h1>
   <div class="steps">
@@ -121,6 +127,7 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
 
 <section id="s1" class="card">
   <h2 data-i="c1h"></h2><p class="sub" data-i="c1sub"></p>
+  <div id="resume" class="hint hidden" style="margin-bottom:10px"><span id="resTxt"></span> <button type="button" class="linkbtn" id="resYes" style="margin:0 6px">استرجاعه</button><button type="button" class="linkbtn" id="resNo" style="margin:0">حذفه</button></div>
   <div class="drop" id="drop" data-i="drop"></div>
   <input type="file" id="files" accept="image/*" multiple class="hidden">
   <div class="pstrip" id="pstrip"></div>
@@ -142,6 +149,8 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
   <div id="selBox" class="selbox hidden">
     <b data-i="selH" style="font-size:14px"></b>
     <div class="sl"><span data-i="lZoom"></span><input type="range" id="pZoom" min="0.25" max="4" step="0.01" value="1"></div>
+    <input type="text" id="pCap" maxlength="40" placeholder="نص فوق هذه الصورة (اختياري)" autocomplete="off" style="margin-top:8px">
+    <label style="margin-top:8px">تأثير ألوان لهذه الصورة</label><div class="chips" id="pfx"></div>
     <div class="sbar" style="margin-top:8px"><button class="btn sec sbtn" id="pL" style="margin-top:0">◀</button><button class="btn sec sbtn" id="pR" style="margin-top:0">▶</button><button class="btn sec sbtn" id="pRot" data-i="rot" style="margin-top:0"></button><button class="btn sec sbtn" id="pFit" style="margin-top:0">⤢ احتواء</button><button class="btn sec sbtn" id="pRst" data-i="rst" style="margin-top:0"></button><button class="btn sec sbtn" id="pDel" style="margin-top:0;color:#d6336c">🗑</button></div>
   </div>
   <p class="sub" style="margin:8px 0 0;font-size:12px" id="dragHint" data-i="dragHint"></p>
@@ -150,6 +159,8 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
   <div class="lays" id="lays"></div>
   <div class="sbar" style="margin:-4px 0 6px"><button class="btn sec sbtn" id="allFit" style="margin-top:0">🔲 عرض الصور كاملة</button><button class="btn sec sbtn" id="allFill" style="margin-top:0">▣ ملء الخانات</button></div>
   <div class="cols2" style="margin-bottom:6px"><b style="font-size:13px">لون الفراغ حول الصورة المصغّرة</b><input type="color" id="cCell"></div>
+  <label style="margin-top:4px">🎯 المنصة (يضبط المقاس والتوزيع تلقائيًا)</label>
+  <div class="chips" id="plats"></div>
   <label data-i="lFmt" style="margin-top:4px"></label>
   <div class="chips" id="fmts"></div>
   <div class="hint" id="fmtHint"></div>
@@ -166,6 +177,10 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
   <label>الإطار الزخرفي</label><div class="chips" id="frames"></div>
   <label>نمط العنوان (بوستر)</label><div class="chips" id="pstyles"></div>
   <div class="cols2"><b style="font-size:13px">لون الإطار</b><input type="color" id="cFr"><b style="font-size:13px">لون الشريط</b><input type="color" id="cPo"></div>
+  <label>✨ تأثير الألوان لكل الصور</label><div class="chips" id="fxs"></div>
+  <label class="consent" style="margin-top:12px"><input type="checkbox" id="oNum"><span>ترقيم الصور (1، 2، 3…)</span></label>
+  <label class="consent" style="margin-top:8px"><input type="checkbox" id="oWm"><span>وسم مائي خفيف فوق الصور</span></label>
+  <div id="wmBox" class="selbox hidden"><input type="text" id="wmText" maxlength="40" placeholder="نص الوسم (افتراضيًا اسمك أو عنوانك)" autocomplete="off"><div class="chips" id="wmpos" style="margin-top:10px"></div></div>
   <label data-i="lFine"></label>
   <div class="sl"><span data-i="sGap"></span><input type="range" id="sGap" min="0" max="48" step="1"></div>
   <div class="sl"><span data-i="sMar"></span><input type="range" id="sMar" min="0" max="80" step="1"></div>
@@ -182,20 +197,29 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
     <div class="orgrow" style="margin-top:10px"><img id="fLogoPrev" alt=""><button class="btn sec" id="fLogoBtn" data-i="fLogo" style="margin-top:0"></button><button class="linkbtn" id="fReset" data-i="fReset" style="margin:0"></button></div>
     <input type="file" id="fLogoFile" accept="image/*" class="hidden">
     <label data-i="lSigPos" style="margin-top:12px"></label><div class="chips" id="sigpos"></div>
+    <label style="margin-top:12px">موضع كود QR</label><div class="chips" id="qrpos"></div>
+    <label style="margin-top:8px">لون كود QR</label><div class="chips" id="qrcs"></div>
   </div>
+  <details class="selbox" style="margin-top:14px"><summary style="font-weight:800;cursor:pointer">💾 قوالبي (هويتي وتنسيقي المفضّل)</summary>
+    <p class="sub" style="margin:8px 0;font-size:13px">احفظ الهوية (اللوجو والاسم والرابط) مع التنسيق الحالي، وافتحها لاحقًا بنقرة.</p>
+    <div class="orgrow"><input type="text" id="tplName" maxlength="24" placeholder="اسم القالب" autocomplete="off"><button type="button" class="btn sec" id="tplSave" style="margin-top:0">حفظ</button></div>
+    <div class="chips" id="tpls" style="margin-top:10px"></div><p class="sub" id="tplMsg" style="margin:6px 0 0;font-size:12px"></p></details>
   <div class="row"><button class="btn sec" id="back1" data-i="back"></button><button class="btn" id="to3" data-i="make"></button></div>
 </section>
 
 <section id="s3" class="card hidden">
   <h2 data-i="c3h"></h2><p class="sub" data-i="c3sub"></p>
   <div id="gal"></div>
+  <label style="margin-top:14px">✂️ تقسيم التصميم لأجزاء متتالية (للنشر كألبوم)</label><div class="chips" id="splits"></div>
   <label data-i="lQual" style="margin-top:14px"></label><div class="chips" id="quals"></div>
   <label data-i="lType" style="margin-top:10px"></label><div class="chips" id="types"></div>
   <div class="row"><button class="btn sec" id="back2" data-i="back2"></button><button class="btn sec" id="dl" data-i="dl"></button></div>
   <button class="btn" id="share" data-i="share"></button>
+  <button class="btn sec" id="pdf">📄 تحميل PDF (صفحة لكل صورة)</button>
   <div class="ok hidden" id="msg"></div>
   <p class="sub" style="margin-top:18px" data-i="capHint"></p>
-  <textarea class="caption" id="caption" rows="5"></textarea>
+  <textarea class="caption" id="caption" rows="6"></textarea>
+  <button class="linkbtn" id="capGen" style="margin:4px 0 0">↻ إنشاء نص المنشور تلقائيًا</button>
   <button class="btn sec" id="copy" data-i="copy"></button>
   <button class="btn sec" id="newBtn" data-i="newBtn"></button>
 </section>
@@ -235,6 +259,7 @@ ar:[["🚀 البداية السريعة","<ol><li><b>الصور:</b> اختر �
 ["🧩 كيف لا تتكدس الصور أو تتشوه؟","<ul><li>زر <b>«عرض الصور كاملة»</b> يُظهر كل الصور كاملة في خاناتها (ويمكنك اختيار لون الفراغ حولها)، و<b>«ملء الخانات»</b> يعيدها.</li><li>التوزيعان <b>«صفوف بدون قص»</b> و<b>«أعمدة بدون قص»</b> يرتبان الصور حسب أبعادها فتظهر <b>كاملة</b> دون قص أو تمطيط.</li><li>مقاس <b>«تلقائي»</b> يحسب أبعاد الإطار من صورك (وطول النص إن وُجد)، فيكبر طوليًا كلما زادت الصور بدل تصغيرها وتكديسها.</li><li>مقاسات النشر الجاهزة (4:5، 1:1، 9:16، 16:9، 3:4) مناسبة للمنصات؛ مع التوزيعات الأخرى قد تُقَصّ أطراف الصور، ويمكنك سحب كل صورة داخل خانتها لاختيار الجزء الظاهر.</li><li>الصور الكثيرة (أكثر من 8) أوضح بمقاس تلقائي أو 9:16.</li></ul>"],
 ["📝 النص","<ul><li><b>الصور فقط:</b> إطار صور بلا نص (العنوان والسطر الثاني اختياريان).</li><li><b>النص داخل إطار الصور:</b> يظهر النص تحت الصور في الصورة نفسها.</li><li><b>النص كصورة مستقلة:</b> تحصل على صورتين: إطار الصور وبطاقة نص منفصلة، وتُحمَّلان أو تُشاركان معًا.</li><li>يتسع النص لـ <b>15 سطرًا</b> مع العنوان؛ كل سطر فقرة، ويصغر الخط تلقائيًا عند الحاجة.</li><li><b>التنسيق:</b> حجم الخط، تباعد الأسطر، المحاذاة (بداية/وسط/نهاية)، خط عريض، نقاط، لون النص ولون التمييز.</li></ul>"],
 ["🔳 كود QR والهوية","<ul><li>فعّل <b>«إظهار هويتي على التصميم»</b> ثم اكتب اسم مؤسستك أو جمعيتك أو اسمك، وأضف لوجو إن شئت.</li><li>اكتب <b>رابط موقعك أو صفحتك</b> فيُنشأ كود QR يضم الرابط ويظهر أسفل التصميم مع اسمك والرابط مكتوبًا.</li><li>الكود يحمل الرابط فقط، والاسم يُعرض بجانبه للتعريف.</li><li>جرّب مسح الكود بهاتفك قبل النشر للتأكد.</li></ul>"],
+["✨ ميزات إضافية","<ul><li><b>المنصة:</b> اختر فيسبوك أو إنستغرام أو قصة أو لينكدإن فيضبط البرنامج المقاس والتوزيع.</li><li><b>الحفظ التلقائي:</b> يُحفظ عملك على جهازك فإن أغلقت الصفحة تجد زر «استرجاعه» في البداية.</li><li><b>نص فوق الصورة:</b> اختر صورة ثم اكتب نصًا قصيرًا يظهر عليها، ويمكنك ترقيم الصور.</li><li><b>وسم مائي:</b> نص خفيف فوق الصور لحمايتها.</li><li><b>تأثير الألوان:</b> دافئ، بارد، أبيض وأسود، وغيرها (للكل أو لصورة واحدة). على بعض الأجهزة القديمة قد لا يظهر.</li><li><b>كود QR:</b> شريط سفلي أو ركن صغير، بلون تختاره.</li><li><b>قوالبي:</b> احفظ هويتك وتنسيقك المفضّل وافتحه بنقرة.</li><li><b>التقسيم وPDF:</b> قسّم التصميم الطويل إلى 2–4 أجزاء متتالية، أو حمّله ملف PDF.</li><li><b>نص المنشور:</b> يُنشأ تلقائيًا من العنوان والنص والرابط والوسم، وتعدّله كما تشاء.</li><li><b>التثبيت:</b> زر «ثبّت البرنامج» يضيفه إلى شاشتك ويعمل دون إنترنت بعد أول فتح.</li></ul>"],
 ["🎨 التصميم","<ul><li><b>التوزيع:</b> شبكة، أشرطة، صورة كبيرة بالأعلى أو بالجانب أو بالوسط، فسيفساء…</li><li><b>النمط:</b> 12 نمطًا جاهزًا (ألوان وإطارات وبولارويد…).</li><li><b>الضبط الدقيق:</b> المسافة، الهامش، تدوير الزوايا، الإطار الأبيض، الخلفية بلون أو تدرج، الظل.</li><li><b>التوقيع:</b> لوجو واسم صفحتك أو موقعك في أسفل التصميم (اختياري ويُحفظ على جهازك).</li></ul>"],
 ["✋ تعديل كل صورة","اضغط صورة داخل المعاينة لتحديدها: اسحبها لتحريك الجزء الظاهر، كبّرها أو صغّرها (حتى أصغر من حجمها الأصلي) بالمنزلق أو بإصبعين، واضغط «احتواء» لتظهر كاملة بلا قص، دوّرها، أو غيّر ترتيبها بالسهمين، أو احذفها."],
 ["📤 النشر","حمّل الصور (JPG أخف وPNG أنقى) أو شاركها مباشرة من الهاتف، أو انسخ كل صورة ثم الصقها في المنشور. يمكنك كتابة نص المنشور ونسخه (لا يظهر على الصورة)."],
@@ -244,7 +269,7 @@ const t=k=>L[lang][k];
 
 /* ---------------- state ---------------- */
 const P=[];            // {cv,w,h,z,ox,oy,th}
-const S={layout:"jr",fmt:"auto",theme:0,gap:14,margin:28,radius:16,border:0,bg:"#ffffff",bg2:"#dfe9f5",grad:false,bcol:"#ffffff",shadow:true,pol:false,tc:null,cbg:"#ffffff",frame:"none",fcol:"#e6b93c",pstyle:"plain",pcol:"#0f3d6e",foot:false,sigpos:"top",title:"",body:"",tmode:"none",tfs:100,tlh:1.65,talign:"s",tbold:false,tbul:false,tcol:null,acc:"#e6b93c",sub:"",qs:2,type:"jpg",sel:-1};
+const S={layout:"jr",fmt:"auto",theme:0,gap:14,margin:28,radius:16,border:0,bg:"#ffffff",bg2:"#dfe9f5",grad:false,bcol:"#ffffff",shadow:true,pol:false,tc:null,cbg:"#ffffff",frame:"none",fcol:"#e6b93c",pstyle:"plain",pcol:"#0f3d6e",foot:false,sigpos:"top",title:"",body:"",tmode:"none",tfs:100,tlh:1.65,talign:"s",tbold:false,tbul:false,tcol:null,acc:"#e6b93c",sub:"",qs:2,type:"jpg",sel:-1,fx:"none",num:false,wm:false,wmt:"",wmpos:"tile",qrpos:"bar",qrc:"#0b1b2e",split:1,plat:""};
 const FM={"4:5":1.25,"1:1":1,"9:16":16/9,"16:9":9/16,"3:4":4/3};
 const THEMES=[
  {bg:"#ffffff",gap:14,margin:28,radius:16,border:0,shadow:true},
@@ -310,7 +335,7 @@ function natural(type,Wc,g,ars,target){const n=ars.length;let best=null;
 const mg=()=>S.frame==="none"?S.margin:Math.max(S.margin,56);
 const noCrop=ty=>ty==="jr"||ty==="jc";
 function plan(type,opt){opt=opt||{};const n=P.length,pol=S.pol,g=pol?Math.max(S.gap,26):S.gap,m=mg();
-  const sig=sigInfo(),ttl=S.title.trim()||(sig.slot?sig.nm:""),hasT=!!ttl,hasS=!!S.sub.trim(),over=S.pstyle==="over"&&!!(S.title.trim()||S.sub.trim()),TL=(hasT&&!over)?titleLay(ttl,W0-2*Math.max(m,40)-(S.pstyle==="badge"?90:0),64,26):null,th=over?0:(TL?TL.h+28:0)+(hasS?58:0),hb=sig.bh+((sig.bh&&th)?14:0)+th,headH=hb?hb+16:0,footH=((footOn()&&!sig.on)?120:0)+(qrOn()?QRH:0),tb=(S.tmode==="with"&&S.body.trim())?tLayout(W0-2*m-8,36*S.tfs/100,S.fmt!=="auto"?Math.round(W0*FM[S.fmt]*.42):0):null,tbH=tb?tb.h+34:0,ex=2*m+headH+footH+tbH,Wc=W0-2*m;
+  const sig=sigInfo(),ttl=S.title.trim()||(sig.slot?sig.nm:""),hasT=!!ttl,hasS=!!S.sub.trim(),over=S.pstyle==="over"&&!!(S.title.trim()||S.sub.trim()),TL=(hasT&&!over)?titleLay(ttl,W0-2*Math.max(m,40)-(S.pstyle==="badge"?90:0),64,26):null,th=over?0:(TL?TL.h+28:0)+(hasS?58:0),hb=sig.bh+((sig.bh&&th)?14:0)+th,headH=hb?hb+16:0,footH=((footOn()&&!sig.on)?120:0)+(qrBar()?QRH:0)+corRes(),tb=(S.tmode==="with"&&S.body.trim())?tLayout(W0-2*m-8,36*S.tfs/100,S.fmt!=="auto"?Math.round(W0*FM[S.fmt]*.42):0):null,tbH=tb?tb.h+34:0,ex=2*m+headH+footH+tbH,Wc=W0-2*m;
   const fixed=S.fmt!=="auto"?FM[S.fmt]:null,ars=P.map(p=>p.w/p.h);
   let H,rects=[],box;
   if(!n)return{H:Math.round(W0*1.25),rects:[],headH,footH,box:{x:m,y:m+headH,w:Wc,h:200},g,tb:null,tbY:0,sig,ttl,th,hb,over,TL};
@@ -327,7 +352,9 @@ function availLayouts(){const n=P.length;if(n<=1)return["jr"];const a=["jr","jc"
 
 /* ---------------- drawing ---------------- */
 function rr(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.roundRect?c.roundRect(x,y,w,h,r):c.rect(x,y,w,h)}
-function cover(c,p,x,y,w,h){const base=Math.max(w/p.w,h/p.h),sc=base*p.z,dw=p.w*sc,dh=p.h*sc,ox=Math.abs(dw-w)/2*p.ox,oy=Math.abs(dh-h)/2*p.oy;c.drawImage(p.cv,x+(w-dw)/2+ox,y+(h-dh)/2+oy,dw,dh)}
+const FX={none:"",warm:"sepia(.28) saturate(1.25) hue-rotate(-8deg) brightness(1.03)",cool:"hue-rotate(14deg) saturate(1.08) brightness(1.02)",bw:"grayscale(1) contrast(1.1)",contrast:"contrast(1.25) saturate(1.1)",vivid:"saturate(1.55) contrast(1.08)",fade:"contrast(.85) brightness(1.1) saturate(.8)"};
+const FXN=[["none","بدون"],["warm","دافئ"],["cool","بارد"],["bw","أبيض وأسود"],["contrast","تباين"],["vivid","زاهٍ"],["fade","باهت"]];
+function cover(c,p,x,y,w,h){const base=Math.max(w/p.w,h/p.h),sc=base*p.z,dw=p.w*sc,dh=p.h*sc,ox=Math.abs(dw-w)/2*p.ox,oy=Math.abs(dh-h)/2*p.oy,f=FX[p.fx||S.fx]||"";if(f&&"filter" in c)c.filter=f;c.drawImage(p.cv,x+(w-dw)/2+ox,y+(h-dh)/2+oy,dw,dh);if(f&&"filter" in c)c.filter="none"}
 function seed(i){const v=Math.sin(i*127.1+311.7)*43758.5453;return v-Math.floor(v)}
 function drawPhoto(c,p,r,i,sc,ui){
   const rad=S.radius;
@@ -388,11 +415,14 @@ function normUrl(v){v=(v||"").trim();if(!v||/\s/.test(v))return"";if(!/^[a-z][a-
 function qrData(){return normUrl(brand.url)}
 let qrC={u:"",q:null};
 function qrGet(u){if(qrC.u!==u){qrC={u,q:null};try{qrC.q=qrEncode(u)}catch(e){qrC.q=null}}return qrC.q}
+function corRes(){return qrCor()&&S.tmode==="with"&&S.body.trim()?190:0}
+function qrBar(){return qrOn()&&S.qrpos==="bar"}
+function qrCor(){return qrOn()&&S.qrpos!=="bar"}
 function qrOn(){return S.foot&&!!qrData()&&!!qrGet(qrData())}
 function drawQrStrip(c,H,tc,m){const u=qrData(),q=qrGet(u);if(!q)return;const pad=Math.max(m,40),cx=pad,cw=W0-2*pad,ch=QRH-44,cy=H-QRH+10;
   c.save();c.shadowColor="rgba(0,0,0,.18)";c.shadowBlur=14;c.shadowOffsetY=4;c.fillStyle="#fff";rr(c,cx,cy,cw,ch,24);c.fill();c.restore();
   const side=ch-28,qx=cx+cw-14-side,qy=cy+14,n=q.size,mod=side/(n+4);
-  c.fillStyle="#fff";c.fillRect(qx,qy,side,side);c.fillStyle="#0b1b2e";
+  c.fillStyle="#fff";c.fillRect(qx,qy,side,side);c.fillStyle=qrCol();
   for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.m[y][x])c.fillRect(Math.round(qx+(x+2)*mod),Math.round(qy+(y+2)*mod),Math.ceil(mod),Math.ceil(mod));
   const tx=qx-22,tw=cw-side-14-22-28,nm=brand.name.trim(),disp=u.replace(/^https?:\/\//i,"").replace(/\/$/,"");
   c.save();c.textBaseline="alphabetic";c.textAlign="right";c.direction="ltr";
@@ -402,7 +432,11 @@ function drawQrStrip(c,H,tc,m){const u=qrData(),q=qrGet(u);if(!q)return;const pa
   if(lines.length){c.font=`800 ${ns}px Cairo,Tahoma,sans-serif`;c.fillStyle="#0b1b2e";for(const l of lines){y+=nlh*.8;c.fillText(l,tx,y);y+=nlh*.2}y+=10}
   y+=ls*.8;c.font=`700 ${ls}px Cairo,Tahoma,sans-serif`;c.fillStyle="#1a5fb4";c.fillText(disp,tx,y);y+=ls*.2+14+hs*.8;
   c.font=`600 ${hs}px Cairo,Tahoma,sans-serif`;c.fillStyle="#5b6b7d";c.fillText(t("qrHint"),tx,y);c.restore()}
-function drawBottom(c,footH,H,tc,sc,m){const qh=qrOn()?QRH:0;drawFoot(c,footH-qh,H-qh,tc,sc,m);if(qh)drawQrStrip(c,H,tc,m)}
+function qrCol(){return lum(S.qrc)<.55?S.qrc:"#0b1b2e"}
+function drawQrCorner(c,H,m){if(!qrCor())return;const q=qrGet(qrData()),n=q.size,card=170,pd=12,side=card-2*pd,mod=side/(n+2),mm=Math.max(m,24),x=S.qrpos==="cr"?W0-mm-card:mm,y=H-mm-card;
+  c.save();c.shadowColor="rgba(0,0,0,.28)";c.shadowBlur=12;c.shadowOffsetY=3;c.fillStyle="#fff";rr(c,x,y,card,card,18);c.fill();c.restore();c.fillStyle=qrCol();
+  for(let j=0;j<n;j++)for(let i=0;i<n;i++)if(q.m[j][i])c.fillRect(Math.round(x+pd+(i+1)*mod),Math.round(y+pd+(j+1)*mod),Math.ceil(mod),Math.ceil(mod))}
+function drawBottom(c,footH,H,tc,sc,m){const qh=qrBar()?QRH:0;drawFoot(c,footH-qh,H-qh,tc,sc,m);if(qh)drawQrStrip(c,H,tc,m)}
 const SR=46;
 function perim(c,inset,step,H,fn){for(let x=inset;x<=W0-inset+.1;x+=step){fn(x,inset);fn(x,H-inset)}for(let y=inset+step;y<=H-inset-step+.1;y+=step){fn(inset,y);fn(W0-inset,y)}}
 function drawFrame(c,H,sc){const f=S.frame;if(f==="none")return;const col=S.fcol;c.save();
@@ -453,7 +487,7 @@ function drawText(c,L,x,y,w,col,acc){c.save();c.fillStyle=col;c.textBaseline="al
 function bgFill(c,H){if(S.grad){const g=c.createLinearGradient(0,0,W0*.6,H);g.addColorStop(0,S.bg);g.addColorStop(1,S.bg2);c.fillStyle=g}else c.fillStyle=S.bg;c.fillRect(0,0,W0,H)}
 function textPlan(){const pad=Math.max(mg(),48),w=W0-2*pad,sig=sigInfo(),ttl=S.title.trim()||(sig.slot?sig.nm:""),hasS=!!S.sub.trim();
   const tl=ttl?titleLay(ttl,w,64,28):null;
-  const headH=tl?tl.h+44:0,subH=hasS?60:0,zone=sig.bh+((sig.bh&&(headH+subH))?14:0)+headH+subH,footH=((footOn()&&!sig.on)?120:0)+(qrOn()?QRH:0),fixed=S.fmt!=="auto"?Math.round(W0*FM[S.fmt]):0,gap=zone?20:0,cap=fixed||4300;
+  const headH=tl?tl.h+44:0,subH=hasS?60:0,zone=sig.bh+((sig.bh&&(headH+subH))?14:0)+headH+subH,footH=((footOn()&&!sig.on)?120:0)+(qrBar()?QRH:0)+(qrCor()?190:0),fixed=S.fmt!=="auto"?Math.round(W0*FM[S.fmt]):0,gap=zone?20:0,cap=fixed||4300;
   const L=S.body.trim()?tLayout(w,40*S.tfs/100,cap-(pad*2+zone+gap+footH)):{paras:[],fs:40,lh:60,ind:0,h:0};
   const content=zone+gap+(S.pstyle==="band"&&zone>0?36:0)+L.h,H=fixed||Math.max(760,Math.min(4300,Math.round(pad*2+content+footH)));
   return{pad,w,tl,headH,subH,zone,gap,footH,L,H,content,sig}}
@@ -465,7 +499,7 @@ function sceneText(c,sc,tp){const H=tp.H,pad=tp.pad,sg=tp.sig,rtl=lang==="ar";c.
   if(tp.tl){const T=tp.tl;c.fillStyle=tcT;c.textAlign="center";c.font=`800 ${T.s}px Cairo,Tahoma,sans-serif`;T.lines.forEach((ln,i)=>c.fillText(ln,cxT,yt+T.s*.9+i*T.lh));
     c.fillStyle=S.acc;rr(c,cxT-70,yt+T.h+10,140,8,4);c.fill();yt+=tp.headH}
   if(tp.subH){c.fillStyle=tcT;c.globalAlpha=.85;c.textAlign="center";const s=fitText(c,S.sub.trim(),wT,34,18,600);c.fillText(S.sub.trim(),cxT,yt+s*.95+4);c.globalAlpha=1}
-  y=z0+tp.zone+tp.gap+(band?36:0);drawText(c,tp.L,pad,y,tp.w,tc,S.acc);drawBottom(c,tp.footH,H,textCol(),sc,pad);c.restore()}
+  y=z0+tp.zone+tp.gap+(band?36:0);drawText(c,tp.L,pad,y,tp.w,tc,S.acc);{const ce=qrCor()?190:0;drawBottom(c,tp.footH-ce,H-ce,textCol(),sc,pad);drawQrCorner(c,H,pad)}c.restore()}
 function scene(c,sc,ui){const pl=plan(S.layout),H=pl.H;c.save();c.scale(sc,sc);
   bgFill(c,H);drawFrame(c,H,sc);
   const tc=textCol(),m=mg();c.fillStyle=tc;c.textAlign="center";c.textBaseline="alphabetic";
@@ -479,7 +513,7 @@ function scene(c,sc,ui){const pl=plan(S.layout),H=pl.H;c.save();c.scale(sc,sc);
     c.fillStyle=tcT;c.textAlign="center";
     if(T){c.font=`800 ${T.s}px Cairo,Tahoma,sans-serif`;T.lines.forEach((ln,i)=>{const by=y+4+T.s*.9+i*T.lh;if(ps==="marker"){const tw=c.measureText(ln).width;c.save();c.globalAlpha=.55;c.fillStyle=S.fcol;rr(c,cxT-tw/2-16,by-T.s*.42,tw+32,T.s*.5,8);c.fill();c.restore();c.fillStyle=tcT}c.fillText(ln,cxT,by)});y+=T.h+28}
     if(hasSub){c.globalAlpha=.9;const s=fitText(c,S.sub.trim(),W0-2*Math.max(m,40)-(ps==="badge"?90:0),34,18,600);c.fillText(S.sub.trim(),cxT,y+s*.9);c.globalAlpha=1}}
-  P.forEach((p,i)=>drawPhoto(c,p,pl.rects[i],i,sc,ui));
+  P.forEach((p,i)=>drawPhoto(c,p,pl.rects[i],i,sc,ui));drawOver(c,pl,sc);
   if(pl.over){const bx=pl.box,yb=bx.y+bx.h-36,hasSub=!!S.sub.trim(),mw=bx.w-80;mc.font="800 76px Cairo,Tahoma,sans-serif";const OT=S.title.trim()?titleLay(S.title.trim(),mw,76,30):null,gh=(OT?OT.h:0)+(hasSub?120:70)+60;
     c.save();rr(c,bx.x,bx.y,bx.w,bx.h,S.radius);c.clip();const g=c.createLinearGradient(0,yb+36-gh-30,0,yb+36);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,0,0,.84)");c.fillStyle=g;c.fillRect(bx.x,yb+36-gh-30,bx.w,gh+30);c.restore();
     c.save();c.textAlign="center";c.fillStyle="#fff";c.shadowColor="rgba(0,0,0,.5)";c.shadowBlur=12*sc;
@@ -489,11 +523,19 @@ function scene(c,sc,ui){const pl=plan(S.layout),H=pl.H;c.save();c.scale(sc,sc);
     c.restore()}
   if(ui&&S.sel>=0&&pl.rects[S.sel]){const r=pl.rects[S.sel];c.save();c.lineWidth=5;c.setLineDash([16,10]);c.strokeStyle="#ff5a36";rr(c,r.x+3,r.y+3,r.w-6,r.h-6,S.radius);c.stroke();c.restore()}
   if(pl.tb)drawText(c,pl.tb,m+4,pl.tbY,W0-2*m-8,S.tcol||tc,S.acc);
-  drawBottom(c,pl.footH,H,tc,sc,m);
+  drawBottom(c,pl.footH-corRes(),H-corRes(),tc,sc,m);drawQrCorner(c,H,m);
   c.restore();return H}
+function drawWM(c,rs,txt,sc){const tile=S.wmpos==="tile";rs.forEach(r=>{if(!r)return;c.save();rr(c,r.x,r.y,r.w,r.h,S.radius);c.clip();c.textBaseline="alphabetic";c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=5*sc;
+  if(tile){const fs=Math.max(22,Math.min(46,Math.min(r.w,r.h)*.085));c.font=`800 ${fs}px Cairo,Tahoma,sans-serif`;c.textAlign="center";c.fillStyle="rgba(255,255,255,.3)";c.translate(r.x+r.w/2,r.y+r.h/2);c.rotate(-.45);const tw=c.measureText(txt).width+fs*2.4,th=fs*3.4,R=Math.hypot(r.w,r.h)/2;let k=0;for(let y=-R;y<=R;y+=th,k++)for(let x=-R-(k%2?tw/2:0);x<=R;x+=tw)c.fillText(txt,x,y)}
+  else{const fs=Math.max(16,Math.min(30,Math.min(r.w,r.h)*.06));c.font=`800 ${fs}px Cairo,Tahoma,sans-serif`;c.textAlign="left";c.fillStyle="rgba(255,255,255,.8)";let tt=txt;while(tt.length>3&&c.measureText(tt).width>r.w*.6)tt=tt.slice(0,-2);c.fillText(tt,r.x+14,r.y+14+fs)}
+  c.restore()})}
+function drawOver(c,pl,sc){const rs=pl.rects;if(S.wm){const txt=(S.wmt||brand.name||S.title||"").trim();if(txt)drawWM(c,rs,txt,sc)}
+  P.forEach((p,i)=>{const r=rs[i];if(!r)return;
+    if(S.num){const R=Math.max(16,Math.min(30,Math.min(r.w,r.h)*.12)),x=lang==="ar"?r.x+r.w-R-10:r.x+R+10,y=r.y+R+10;c.save();c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=8*sc;c.fillStyle=S.fcol;c.beginPath();c.arc(x,y,R,0,7);c.fill();c.restore();c.save();c.fillStyle=lum(S.fcol)>.6?"#14213d":"#ffffff";c.font=`800 ${Math.round(R*1.1)}px Cairo,Tahoma,sans-serif`;c.textAlign="center";c.textBaseline="middle";c.fillText(String(i+1),x,y+1);c.restore()}
+    const cp=(p.cap||"").trim();if(cp&&r.w>80){c.save();const fs=fitText(c,cp,r.w-60,34,14,700),tw=c.measureText(cp).width,ph=Math.round(fs*1.9),pw=Math.min(r.w-20,tw+40),px=r.x+(r.w-pw)/2,py=r.y+r.h-ph-14;c.fillStyle="rgba(0,0,0,.62)";rr(c,px,py,pw,ph,ph/2);c.fill();c.fillStyle="#fff";c.textAlign="center";c.textBaseline="middle";c.fillText(cp,r.x+r.w/2,py+ph/2+1);c.restore()}})}
 const cv=$("cv"),cx=cv.getContext("2d");
 const cv2=$("cv2"),cx2=cv2.getContext("2d");
-function draw(){if($("s2").classList.contains("hidden")&&!window.__force)return;const pl=plan(S.layout);cv.width=W0;cv.height=pl.H;scene(cx,1,true);hints();if(S.tmode==="sep"){const tp=textPlan();cv2.width=W0;cv2.height=tp.H;sceneText(cx2,1,tp)}}
+function draw(){touch();if($("s2").classList.contains("hidden")&&!window.__force)return;const pl=plan(S.layout);cv.width=W0;cv.height=pl.H;scene(cx,1,true);hints();if(S.tmode==="sep"){const tp=textPlan();cv2.width=W0;cv2.height=tp.H;sceneText(cx2,1,tp)}}
 function hints(){const nc=noCrop(S.layout),pl=plan(S.layout);let m=nc?(S.fmt==="auto"?t("fAutoH"):t("fNoCrop")):t("fFixH");if(pl.tb&&pl.tb.fs<26)m+=" "+t("tSmall");$("fmtHint").textContent=m;$("fmtHint").classList.toggle("hidden",!P.length)}
 /* thumbnails of layouts */
 function thumbs(){document.querySelectorAll("#lays .lay canvas").forEach(c=>{const ty=c.dataset.t,pl=plan(ty),k=c.getContext("2d"),s=c.width/W0;k.setTransform(1,0,0,1,0,0);k.clearRect(0,0,c.width,c.height);const hh=pl.H*s,oy=(c.height-hh)/2;
@@ -528,6 +570,53 @@ $("fLogoBtn").onclick=()=>$("fLogoFile").click();
 $("fLogoFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,512/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);brand.data=c.toDataURL("image/png");const im=new Image();im.onload=()=>{brand.logo=im;saveBrand();syncFoot();draw()};im.src=brand.data};i.src=r.result};r.readAsDataURL(f);e.target.value=""};
 $("fReset").onclick=()=>{brand.logo=null;brand.data="";brand.name="";brand.url="";saveBrand();syncFoot();draw()};
 
+/* ---------------- platforms / effects / watermark / qr options ---------------- */
+const PLAT=[["fb","📘 فيسبوك","4:5",null],["ig","📸 إنستغرام","4:5",null],["story","🎞️ قصة / ريلز","9:16","jc"],["li","💼 لينكدإن / X","16:9","jr"],["pin","📌 بنترست","3:4",null],["sq","⬜ مربع","1:1",null]];
+function buildPlats(){$("plats").innerHTML=PLAT.map(([k,n])=>`<span class="chip${k===S.plat?" on":""}" data-k="${k}">${n}</span>`).join("")}
+$("plats").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;const p=PLAT.find(x=>x[0]===c.dataset.k);S.plat=p[0];S.fmt=p[2];if(p[3]&&availLayouts().includes(p[3]))S.layout=p[3];buildPlats();buildFmts();buildLays();draw();thumbs()};
+const chipsOf=(arr,cur)=>arr.map(([k,n])=>`<span class="chip${k===cur?" on":""}" data-k="${k}">${n}</span>`).join("");
+function buildFx(){$("fxs").innerHTML=chipsOf(FXN,S.fx);const p=P[S.sel];$("pfx").innerHTML=chipsOf([["","كالعام"],...FXN],p?(p.fx||""):"")}
+$("fxs").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.fx=c.dataset.k;buildFx();draw()};
+$("pfx").onclick=e=>{const c=e.target.closest(".chip"),p=P[S.sel];if(!c||!p)return;p.fx=c.dataset.k;buildFx();draw()};
+$("pCap").oninput=e=>{const p=P[S.sel];if(!p)return;p.cap=e.target.value;draw()};
+$("oNum").onchange=e=>{S.num=e.target.checked;draw()};
+function buildWm(){$("wmBox").classList.toggle("hidden",!S.wm);$("wmpos").innerHTML=chipsOf([["tile","مكرّر بشكل قُطري"],["corner","في ركن كل صورة"]],S.wmpos);$("wmText").value=S.wmt;$("oWm").checked=S.wm;$("oNum").checked=S.num}
+$("oWm").onchange=e=>{S.wm=e.target.checked;buildWm();draw()};
+$("wmText").oninput=e=>{S.wmt=e.target.value;draw()};
+$("wmpos").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.wmpos=c.dataset.k;buildWm();draw()};
+const QRC=[["#0b1b2e","كحلي"],["#000000","أسود"],["#0f3d6e","أزرق"],["#0b6a32","أخضر"],["#7a1230","عنابي"]];
+function buildQr(){$("qrpos").innerHTML=chipsOf([["bar","شريط سفلي"],["cr","ركن يمين"],["cl","ركن يسار"]],S.qrpos);$("qrcs").innerHTML=QRC.map(([k,n])=>`<span class="chip${k===S.qrc?" on":""}" data-k="${k}" style="border-right:12px solid ${k}">${n}</span>`).join("")}
+$("qrpos").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.qrpos=c.dataset.k;buildQr();draw()};
+$("qrcs").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.qrc=c.dataset.k;buildQr();draw()};
+function refreshAll(){buildLays();buildFmts();buildPlats();buildThemes();syncCtl();syncFoot();syncTxt();buildSig();buildFx();buildWm();buildQr();selUI();draw();thumbs()}
+
+/* ---------------- templates ---------------- */
+const TK="collage_tpls",TFIELDS=["theme","gap","margin","radius","border","bg","bg2","grad","bcol","shadow","pol","tc","cbg","frame","fcol","pstyle","pcol","foot","sigpos","acc","fx","num","wm","wmt","wmpos","qrpos","qrc","fmt","plat"];
+const tplGet=()=>{try{const a=JSON.parse(localStorage.getItem(TK)||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}};
+function buildTpls(){const a=tplGet();$("tpls").innerHTML=a.length?a.map((x,i)=>`<span class="chip" data-k="${i}">${String(x.n).replace(/[<>&]/g,"")} <b data-d="${i}" style="margin-right:6px;color:#c0392b">✕</b></span>`).join(""):'<span class="sub" style="font-size:13px">لا قوالب محفوظة بعد.</span>'}
+$("tplSave").onclick=()=>{const n=$("tplName").value.trim()||("قالب "+(tplGet().length+1)),a=tplGet().filter(x=>x.n!==n);if(a.length>=6){$("tplMsg").textContent="الحد الأقصى 6 قوالب، احذف قالبًا لإضافة جديد.";return}
+  const st={};TFIELDS.forEach(k=>st[k]=S[k]);a.push({n,st,b:{name:brand.name,url:brand.url,logo:brand.data||""}});try{localStorage.setItem(TK,JSON.stringify(a));$("tplMsg").textContent="تم حفظ القالب «"+n+"».";$("tplName").value=""}catch(e){$("tplMsg").textContent="تعذّر الحفظ (مساحة المتصفح ممتلئة). جرّب لوجو أصغر."}buildTpls()};
+$("tpls").onclick=e=>{const a=tplGet(),d=e.target.closest("[data-d]");if(d){a.splice(+d.dataset.d,1);try{localStorage.setItem(TK,JSON.stringify(a))}catch(x){}buildTpls();return}
+  const c=e.target.closest(".chip");if(!c||c.dataset.k===undefined)return;const x=a[+c.dataset.k];if(!x)return;Object.assign(S,x.st);brand.name=x.b.name||"";brand.url=x.b.url||"";
+  const done=()=>{saveBrand();refreshAll();$("tplMsg").textContent="تم تطبيق القالب «"+x.n+"»."};
+  if(x.b.logo&&x.b.logo.startsWith("data:image/")){const i=new Image();i.onload=()=>{brand.logo=i;brand.data=x.b.logo;done()};i.onerror=()=>{brand.logo=null;brand.data="";done()};i.src=x.b.logo}else{brand.logo=null;brand.data="";done()}};
+
+/* ---------------- autosave (IndexedDB) ---------------- */
+const IDB={db:null,open(){if(this.db)return this.db;return this.db=new Promise((res,rej)=>{try{const r=indexedDB.open("collage_db",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})},
+  async get(k){const d=await this.open();return new Promise((res,rej)=>{const q=d.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})},
+  async set(k,v){const d=await this.open();return new Promise((res,rej)=>{const tx=d.transaction("kv","readwrite");tx.objectStore("kv").put(v,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})},
+  async del(k){const d=await this.open();return new Promise((res,rej)=>{const tx=d.transaction("kv","readwrite");tx.objectStore("kv").delete(k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}};
+const toBlobP=(c,type,q)=>new Promise(r=>c.toBlob(r,type,q));
+let svT=0,svBusy=false,restoring=false;
+function touch(){if(restoring)return;clearTimeout(svT);svT=setTimeout(saveProj,1800)}
+async function saveProj(){if(svBusy||restoring)return;svBusy=true;try{if(!P.length){await IDB.del("proj");return}
+  const ph=[];for(const p of P){if(!p._b)p._b=await toBlobP(p.cv,"image/jpeg",.88);ph.push({b:p._b,w:p.w,h:p.h,z:p.z,ox:p.ox,oy:p.oy,cap:p.cap||"",fx:p.fx||""})}
+  const st={...S,sel:-1};await IDB.set("proj",{t:Date.now(),S:st,ph})}catch(e){}finally{svBusy=false}}
+async function checkResume(){try{const d=await IDB.get("proj");if(d&&d.ph&&d.ph.length&&!P.length){$("resTxt").textContent="💾 لديك تصميم محفوظ تلقائيًا ("+d.ph.length+" صور). ";$("resume").classList.remove("hidden");$("resYes").onclick=()=>restoreProj(d);$("resNo").onclick=async()=>{$("resume").classList.add("hidden");try{await IDB.del("proj")}catch(e){}}}}catch(e){}}
+async function restoreProj(d){restoring=true;$("busy").classList.remove("hidden");try{P.length=0;for(const o of d.ph){const bm=await decode(o.b),c=document.createElement("canvas");c.width=o.w;c.height=o.h;c.getContext("2d").drawImage(bm.src,0,0,o.w,o.h);bm.close();P.push({cv:c,w:o.w,h:o.h,z:o.z,ox:o.ox,oy:o.oy,cap:o.cap,fx:o.fx,th:thumbURL(c),_b:o.b})}
+  Object.assign(S,d.S,{sel:-1});$("tTitle").value=S.title;$("tSub").value=S.sub;$("tBody").value=S.body;buildModes();renderStrip();$("resume").classList.add("hidden")}catch(e){$("e1").textContent="تعذّر استرجاع التصميم المحفوظ."}finally{$("busy").classList.add("hidden");restoring=false}}
+document.addEventListener("input",touch);document.addEventListener("change",touch);
+
 /* ---------------- photos ---------------- */
 async function decode(f){
   if(window.createImageBitmap){try{const bm=await createImageBitmap(f,{imageOrientation:"from-image"});return{src:bm,w:bm.width,h:bm.height,close:()=>{try{bm.close()}catch(e){}}}}catch(e){}}
@@ -543,7 +632,7 @@ async function addFiles(list){if(loading)return;const all=[...list],fs=all.filte
   try{for(let i=0;i<take.length;i++){bp.textContent=t("busy")+" "+(i+1)+" / "+take.length;await new Promise(r=>setTimeout(r,15));const p=await loadFile(take[i]);if(p)P.push(p);else bad++}}
   finally{bp.textContent=t("busy");$("busy").classList.add("hidden");loading=false;renderStrip()}
   const msgs=[];if(fs.length>room)msgs.push(t("eMax"));if(bad)msgs.push(`تعذّرت قراءة ${bad} ${bad>1?"صور":"صورة"} (قد تكون بصيغة غير مدعومة مثل HEIC أو تالفة). جرّب تحويلها إلى JPG أو اختيارها من جديد.`);$("e1").textContent=msgs.join(" ")}
-function renderStrip(){$("pstrip").innerHTML=P.map((p,i)=>`<div class="pi" data-i="${i}"><img src="${p.th}" alt=""><span class="nb">${i+1}</span><div class="ct"><button data-a="l">${lang==="ar"?"▶":"◀"}</button><button data-a="r">${lang==="ar"?"◀":"▶"}</button><button class="x" data-a="x">✕</button></div></div>`).join("");$("pcount").textContent=t("nPh")(P.length)}
+function renderStrip(){touch();$("pstrip").innerHTML=P.map((p,i)=>`<div class="pi" data-i="${i}"><img src="${p.th}" alt=""><span class="nb">${i+1}</span><div class="ct"><button data-a="l">${lang==="ar"?"▶":"◀"}</button><button data-a="r">${lang==="ar"?"◀":"▶"}</button><button class="x" data-a="x">✕</button></div></div>`).join("");$("pcount").textContent=t("nPh")(P.length)}
 $("pstrip").onclick=e=>{const b=e.target.closest("button");if(!b)return;const i=+b.closest(".pi").dataset.i,a=b.dataset.a;if(a==="x")P.splice(i,1);else{const j=a==="l"?i-1:i+1;if(j<0||j>=P.length)return;[P[i],P[j]]=[P[j],P[i]]}S.sel=-1;renderStrip()};
 $("drop").onclick=()=>$("files").click();$("files").onchange=async e=>{const inp=e.target,fl=[...inp.files];await addFiles(fl);try{inp.value=""}catch(x){}};
 ["dragover","dragenter"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.add("over")}));["dragleave","drop"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.remove("over")}));
@@ -551,7 +640,7 @@ $("drop").addEventListener("drop",e=>addFiles(e.dataTransfer.files));
 $("tTitle").oninput=e=>{S.title=e.target.value};$("tSub").oninput=e=>{S.sub=e.target.value};
 
 /* ---------------- selected photo editing ---------------- */
-function selUI(){const p=P[S.sel];$("selBox").classList.toggle("hidden",!p);$("dragHint").classList.toggle("hidden",!!p&&false);if(p)$("pZoom").value=p.z}
+function selUI(){const p=P[S.sel];$("selBox").classList.toggle("hidden",!p);$("dragHint").classList.toggle("hidden",!!p&&false);if(p){$("pZoom").value=p.z;$("pCap").value=p.cap||"";buildFx()}}
 function geo(i){const pl=plan(S.layout),r=pl.rects[i],p=P[i];if(!r)return null;const base=Math.max(r.w/p.w,r.h/p.h)*p.z;return{r,ovx:Math.abs(p.w*base-r.w)/2,ovy:Math.abs(p.h*base-r.h)/2}}
 const ptrs=new Map();let drag=null,pinch=null;
 function pt(e){const b=cv.getBoundingClientRect();return{x:(e.clientX-b.left)/b.width*cv.width,y:(e.clientY-b.top)/b.height*cv.height,k:cv.width/b.width}}
@@ -579,7 +668,7 @@ $("pDel").onclick=()=>{if(S.sel<0)return;P.splice(S.sel,1);S.sel=-1;if(!P.length
 
 /* ---------------- steps ---------------- */
 function go(n){["s1","s2","s3"].forEach((id,i)=>$(id).classList.toggle("hidden",i+1!==n));document.querySelectorAll(".step").forEach(s=>{const k=+s.dataset.s;s.classList.toggle("active",k===n);s.classList.toggle("done",k<n)});window.scrollTo({top:0,behavior:"smooth"})}
-$("to2").onclick=()=>{if(!P.length){$("e1").textContent=t("eNone");return}if(S.tmode!=="none"&&!S.body.trim()&&!S.title.trim()){$("e1").textContent=t("eText");return}$("e1").textContent="";S.sel=-1;go(2);buildLays();buildFmts();buildThemes();syncCtl();syncFoot();syncTxt();buildSig();selUI();draw()};
+$("to2").onclick=()=>{if(!P.length){$("e1").textContent=t("eNone");return}if(S.tmode!=="none"&&!S.body.trim()&&!S.title.trim()){$("e1").textContent=t("eText");return}$("e1").textContent="";S.sel=-1;go(2);refreshAll()};
 function buildModes(){$("tmodes").innerHTML=[["none","mNone"],["with","mWith"],["sep","mSep"]].map(([k,n])=>`<span class="chip${k===S.tmode?" on":""}" data-k="${k}">${t(n)}</span>`).join("");$("bodyBox").classList.toggle("hidden",S.tmode==="none");$("bodyCnt").textContent=t("bodyCnt")(S.body?S.body.split("\n").length:0)}
 $("tmodes").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.tmode=c.dataset.k;buildModes()};
 $("tBody").oninput=e=>{let v=e.target.value.split("\n");if(v.length>15){v=v.slice(0,15);e.target.value=v.join("\n")}S.body=e.target.value;$("bodyCnt").textContent=t("bodyCnt")(S.body?v.length:0)};
@@ -589,7 +678,7 @@ $("talign").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.talign=
 $("tSize").oninput=e=>{S.tfs=+e.target.value;draw()};$("tLine").oninput=e=>{S.tlh=+e.target.value;draw()};$("tBold").onchange=e=>{S.tbold=e.target.checked;draw()};$("tBul").onchange=e=>{S.tbul=e.target.checked;draw()};
 $("tCol").oninput=e=>{S.tcol=e.target.value;draw()};$("tAuto").onclick=()=>{S.tcol=null;$("tCol").value=textCol();draw()};$("tAcc").oninput=e=>{S.acc=e.target.value;draw()};
 $("back1").onclick=()=>go(1);$("back2").onclick=()=>go(2);
-$("newBtn").onclick=()=>{P.length=0;S.sel=-1;renderStrip();go(1)};
+$("newBtn").onclick=async()=>{P.length=0;S.sel=-1;S.title="";S.sub="";S.body="";$("tTitle").value="";$("tSub").value="";$("tBody").value="";capEdited=false;$("caption").value="";buildModes();renderStrip();try{await IDB.del("proj")}catch(e){}go(1)};
 
 /* ---------------- export ---------------- */
 let results=[];
@@ -597,11 +686,28 @@ function qsFor(H){let q=S.qs;while(q>1&&(W0*q)*(H*q)>16e6)q--;return q}
 function mkBlob(kind){return new Promise(res=>{S.sel=-1;const tp=kind==="text"?textPlan():null,Hh=tp?tp.H:plan(S.layout).H,q=qsFor(Hh),c=document.createElement("canvas");c.width=Math.round(W0*q);c.height=Math.round(Hh*q);const x=c.getContext("2d");x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";
   if(tp)sceneText(x,q,tp);else scene(x,q,false);c.toBlob(b=>res({b,w:c.width,h:c.height}),S.type==="png"?"image/png":"image/jpeg",.93)})}
 const kinds=()=>S.tmode==="sep"&&(S.body.trim()||S.title.trim())?["photos","text"]:["photos"];
-async function render(){$("busy").classList.remove("hidden");await new Promise(r=>setTimeout(r,30));try{results.forEach(r=>URL.revokeObjectURL(r.url));results=[];for(const k of kinds()){const r=await mkBlob(k);results.push({k,b:r.b,w:r.w,h:r.h,url:URL.createObjectURL(r.b)})}buildGal()}finally{$("busy").classList.add("hidden")}}
+let capEdited=false;$("caption").addEventListener("input",()=>{capEdited=true});
+function autoCap(){const ti=S.title.trim(),sb=S.sub.trim(),bd=S.body.trim(),nm=brand.name.trim(),u=S.foot?qrData():"",o=[];if(ti)o.push(ti);if(sb)o.push(sb);if(bd){o.push("");o.push(bd.length>600?bd.slice(0,600).replace(/\s+\S*$/,"")+"…":bd)}
+  if(u){o.push("");o.push("🔗 "+u)}const tg=nm?nm.replace(/[^\p{L}\p{N}\s]/gu,"").trim().split(/\s+/).filter(Boolean).slice(0,4).join("_"):"";if(tg){o.push("");o.push("#"+tg)}return o.join("\n").trim()}
+$("capGen").onclick=()=>{capEdited=false;$("caption").value=autoCap()};
+function buildSplits(){$("splits").innerHTML=[[1,"بدون تقسيم"],[2,"جزآن"],[3,"3 أجزاء"],[4,"4 أجزاء"]].map(([k,n])=>`<span class="chip${k===S.split?" on":""}" data-k="${k}">${n}</span>`).join("")}
+$("splits").onclick=async e=>{const c=e.target.closest(".chip");if(!c)return;S.split=+c.dataset.k;buildSplits();await render()};
+async function splitBlob(r,k){const bm=await createImageBitmap(r.b),out=[],h0=Math.floor(bm.height/k);for(let j=0;j<k;j++){const c=document.createElement("canvas"),hh=j===k-1?bm.height-h0*j:h0;c.width=bm.width;c.height=hh;c.getContext("2d").drawImage(bm,0,h0*j,bm.width,hh,0,0,bm.width,hh);const b=await toBlobP(c,r.b.type||"image/jpeg",.93);out.push({b,w:c.width,h:c.height})}bm.close&&bm.close();return out}
+async function makePDF(){const items=[];for(const r of results){const bm=await createImageBitmap(r.b),c=document.createElement("canvas");c.width=bm.width;c.height=bm.height;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(bm,0,0);bm.close&&bm.close();const b=await toBlobP(c,"image/jpeg",.92);items.push({d:new Uint8Array(await b.arrayBuffer()),w:c.width,h:c.height})}
+  const enc=new TextEncoder(),parts=[],off=[];let len=0;const push=d=>{const b=typeof d==="string"?enc.encode(d):d;parts.push(b);len+=b.length};
+  const n=items.length;push("%PDF-1.4\n");off[1]=len;push("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");off[2]=len;push(`2 0 obj\n<< /Type /Pages /Kids [${items.map((_,i)=>`${3+3*i} 0 R`).join(" ")}] /Count ${n} >>\nendobj\n`);
+  items.forEach((it,i)=>{const pw=595,ph=Math.min(14400,Math.round(595*it.h/it.w*100)/100),a=3+3*i,cn=a+1,im=a+2,cs=`q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+    off[a]=len;push(`${a} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${im} 0 R >> >> /Contents ${cn} 0 R >>\nendobj\n`);
+    off[cn]=len;push(`${cn} 0 obj\n<< /Length ${cs.length} >>\nstream\n${cs}\nendstream\nendobj\n`);
+    off[im]=len;push(`${im} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${it.w} /Height ${it.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${it.d.length} >>\nstream\n`);push(it.d);push("\nendstream\nendobj\n")});
+  const total=3+3*n,xr=len;push(`xref\n0 ${total}\n0000000000 65535 f \n`);for(let i=1;i<total;i++)push(String(off[i]).padStart(10,"0")+" 00000 n \n");push(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`);
+  return new Blob(parts,{type:"application/pdf"})}
+$("pdf").onclick=async()=>{if(!results.length)return;$("busy").classList.remove("hidden");try{const b=await makePDF(),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="collage-"+Date.now()%100000+".pdf";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);flash("saved")}catch(e){$("msg").textContent="تعذّر إنشاء PDF.";$("msg").classList.remove("hidden")}finally{$("busy").classList.add("hidden")}};
+async function render(){$("busy").classList.remove("hidden");await new Promise(r=>setTimeout(r,30));try{results.forEach(r=>URL.revokeObjectURL(r.url));results=[];for(const k of kinds()){const r=await mkBlob(k);if(S.split>1){const ps=await splitBlob(r,S.split);ps.forEach((q,j)=>results.push({k,b:q.b,w:q.w,h:q.h,url:URL.createObjectURL(q.b),lbl:t(k==="text"?"rText":"rPhotos")+" — جزء "+(j+1)+" / "+ps.length}))}else results.push({k,b:r.b,w:r.w,h:r.h,url:URL.createObjectURL(r.b)})}buildGal();if(!capEdited)$("caption").value=autoCap()}finally{$("busy").classList.add("hidden")}}
 const canClip=()=>!!(navigator.clipboard&&window.ClipboardItem);
-function buildGal(){$("gal").innerHTML=results.map((r,i)=>`<div class="gitem">${results.length>1?`<b style="font-size:14px">${t(r.k==="text"?"rText":"rPhotos")}</b>`:""}<img src="${r.url}" style="width:100%;border-radius:22px;background:#eee;display:block;margin-top:6px" alt=""><p class="sub" style="margin:6px 0 0;font-size:12px">${t("info")(r.w,r.h)} · ${(r.b.size/1048576).toFixed(1)} MB</p><div class="row"><button class="btn sec" data-a="dl" data-i="${i}" style="margin-top:6px;padding:10px;font-size:14px">${t("dl1")}</button>${canClip()?`<button class="btn sec" data-a="cp" data-i="${i}" style="margin-top:6px;padding:10px;font-size:14px">${t("copyImg")}</button>`:""}</div></div>`).join("")}
+function buildGal(){$("gal").innerHTML=results.map((r,i)=>`<div class="gitem">${results.length>1?`<b style="font-size:14px">${r.lbl||t(r.k==="text"?"rText":"rPhotos")}</b>`:""}<img src="${r.url}" style="width:100%;border-radius:22px;background:#eee;display:block;margin-top:6px" alt=""><p class="sub" style="margin:6px 0 0;font-size:12px">${t("info")(r.w,r.h)} · ${(r.b.size/1048576).toFixed(1)} MB</p><div class="row"><button class="btn sec" data-a="dl" data-i="${i}" style="margin-top:6px;padding:10px;font-size:14px">${t("dl1")}</button>${canClip()?`<button class="btn sec" data-a="cp" data-i="${i}" style="margin-top:6px;padding:10px;font-size:14px">${t("copyImg")}</button>`:""}</div></div>`).join("")}
 $("to3").onclick=async()=>{go(3);buildOpts();await render()};
-function buildOpts(){$("quals").innerHTML=[[1,"qN"],[2,"qH"]].map(([q,k])=>`<span class="chip${q===S.qs?" on":""}" data-q="${q}">${t(k)}</span>`).join("");$("types").innerHTML=[["jpg","tJ"],["png","tP"]].map(([q,k])=>`<span class="chip${q===S.type?" on":""}" data-t="${q}">${t(k)}</span>`).join("")}
+function buildOpts(){buildSplits();$("quals").innerHTML=[[1,"qN"],[2,"qH"]].map(([q,k])=>`<span class="chip${q===S.qs?" on":""}" data-q="${q}">${t(k)}</span>`).join("");$("types").innerHTML=[["jpg","tJ"],["png","tP"]].map(([q,k])=>`<span class="chip${q===S.type?" on":""}" data-t="${q}">${t(k)}</span>`).join("")}
 $("quals").onclick=async e=>{const c=e.target.closest(".chip");if(!c)return;S.qs=+c.dataset.q;buildOpts();await render()};
 $("types").onclick=async e=>{const c=e.target.closest(".chip");if(!c)return;S.type=c.dataset.t;buildOpts();await render()};
 function flash(k){const m=$("msg");m.textContent=t(k);m.classList.remove("hidden");setTimeout(()=>m.classList.add("hidden"),2500)}
@@ -624,6 +730,13 @@ function applyLang(){document.documentElement.lang=lang;document.documentElement
   document.title=t("org");
   renderStrip();buildModes();if(!$("s2").classList.contains("hidden")){buildLays();buildFmts();buildThemes();syncTxt();buildSig();draw()}if(!$("s3").classList.contains("hidden")){buildOpts();render()}}
 document.querySelector(".brand img").src=LOGO_DATA;
+let dip=null;const isStandalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dip=e;if(!isStandalone())$("instBtn").classList.remove("hidden")});
+window.addEventListener("appinstalled",()=>$("instBtn").classList.add("hidden"));
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!isStandalone())$("instBtn").classList.remove("hidden");
+$("instBtn").onclick=async()=>{if(dip){dip.prompt();try{await dip.userChoice}catch(e){}dip=null;$("instBtn").classList.add("hidden")}else alert("للتثبيت على الآيفون: اضغط زر المشاركة في المتصفح ثم اختر «إضافة إلى الشاشة الرئيسية».")};
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw-collage.js",{scope:"./collage.html"}).catch(()=>{});
+buildTpls();checkResume();
 applyTheme(0);applyLang();
 if(document.fonts&&document.fonts.load){const smp="العنوان الصور Photos";Promise.all([400,600,700,800].map(w=>document.fonts.load(`${w} 30px Cairo`,smp))).then(()=>{for(const k in tcache)delete tcache[k];draw();thumbs()}).catch(()=>{})}
 </script>
