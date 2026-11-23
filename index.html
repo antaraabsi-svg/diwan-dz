@@ -177,6 +177,8 @@ aside h1{font-size:20px;margin:14px 0 10px}.steps{flex-direction:row}.step{flex:
   <label class="consent" style="margin-top:8px"><input type="checkbox" id="oFoot"><span data-i="oFoot"></span></label>
   <div id="footBox" class="selbox hidden">
     <input type="text" id="fName" maxlength="70" data-p="pFname" autocomplete="off">
+    <input type="text" id="fUrl" maxlength="140" data-p="pFurl" autocomplete="off" inputmode="url" dir="ltr" style="margin-top:8px;text-align:left">
+    <div class="hint" data-i="hFurl" style="margin-top:6px"></div>
     <div class="orgrow" style="margin-top:10px"><img id="fLogoPrev" alt=""><button class="btn sec" id="fLogoBtn" data-i="fLogo" style="margin-top:0"></button><button class="linkbtn" id="fReset" data-i="fReset" style="margin:0"></button></div>
     <input type="file" id="fLogoFile" accept="image/*" class="hidden">
     <label data-i="lSigPos" style="margin-top:12px"></label><div class="chips" id="sigpos"></div>
@@ -220,7 +222,7 @@ ar:{org:"الرفيق في النشر",brandSub:"",tSmall:"النص صغير ف�
  next:"التالي ←",back:"→ رجوع",back2:"→ تعديل",make:"إنشاء الصورة ✨",busy:"جارٍ التحضير…",
  c2h:"صمّم الإطار",c2sub:"اسحب أي صورة داخل خانتها لتغيير موضعها، واضغط عليها لتكبيرها أو تدويرها.",selH:"الصورة المحددة",lZoom:"تكبير",rot:"⟳ تدوير",rst:"إعادة",dragHint:"اضغط على صورة داخل التصميم لتحديدها ثم اسحبها لتحريكها. بإصبعين تكبّر وتصغّر.",
  lLay:"توزيع الصور",lFmt:"مقاس الصورة النهائية",lTheme:"النمط",lFine:"ضبط دقيق",sGap:"المسافة بينها",sMar:"الهامش",sRad:"تدوير الزوايا",sBor:"إطار أبيض",lBg:"الخلفية",grad:"تدرج",lBor:"لون الإطار",
- oShadow:"ظل خفيف للصور",oPol:"شكل بولارويد (بطاقات مائلة قليلاً)",oFoot:"إظهار لوجو واسم صفحتك على التصميم",pFname:"اسم صفحتك أو موقعك أو مؤسستك",fLogo:"🖼️ إضافة لوجو",fReset:"مسح الهوية",
+ oShadow:"ظل خفيف للصور",oPol:"شكل بولارويد (بطاقات مائلة قليلاً)",oFoot:"إظهار هويتي على التصميم (لوجو واسم وكود QR)",pFname:"اسم صفحتك أو موقعك أو مؤسستك",pFurl:"رابط موقعك أو صفحتك (https://...)",hFurl:"عند إدخال الرابط يُنشأ كود QR يضم الرابط ويظهر معه اسمك أسفل التصميم.",qrHint:"امسح الرمز للزيارة",fLogo:"🖼️ إضافة لوجو",fReset:"مسح الهوية",
  fAuto:"تلقائي (يتكيّف مع الصور)",fAutoH:"المقاس يُحسب من أبعاد صورك فلا تُقَصّ ولا تتكدس.",fFixH:"في هذا المقاس قد تُقَصّ أطراف بعض الصور. اختر «بدون قص» أو «تلقائي» للحفاظ عليها كاملة.",fNoCrop:"في هذا المقاس تظهر الصور كاملة بدون قص، وقد تبقى مساحة فارغة حولها.",
  L_jr:"صفوف بدون قص",L_jc:"أعمدة بدون قص",L_grid:"شبكة",L_band:"أشرطة",L_ht:"كبيرة بالأعلى",L_hl:"كبيرة بالجانب",L_hc:"كبيرة بالوسط",L_mo:"فسيفساء",
  T0:"أبيض نظيف",T1:"كريمي",T2:"داكن أنيق",T3:"الجزائر",T4:"غروب",T5:"محيط",T6:"بولارويد",T7:"شبابي",T8:"نعناع",T9:"متلاصق",T10:"ذهبي",T11:"رياضي",
@@ -232,6 +234,7 @@ const GUIDE={
 ar:[["🚀 البداية السريعة","<ol><li><b>الصور:</b> اختر صورك (حتى 16) ورتّبها بالأسهم، واكتب عنوانًا ونصًا إن شئت.</li><li><b>التصميم:</b> اختر التوزيع والمقاس والنمط ونسّق النص.</li><li><b>النشر:</b> حمّل الصور أو شاركها وأرفقها بمنشورك أو مقالك.</li></ol>"],
 ["🧩 كيف لا تتكدس الصور أو تتشوه؟","<ul><li>زر <b>«عرض الصور كاملة»</b> يُظهر كل الصور كاملة في خاناتها (ويمكنك اختيار لون الفراغ حولها)، و<b>«ملء الخانات»</b> يعيدها.</li><li>التوزيعان <b>«صفوف بدون قص»</b> و<b>«أعمدة بدون قص»</b> يرتبان الصور حسب أبعادها فتظهر <b>كاملة</b> دون قص أو تمطيط.</li><li>مقاس <b>«تلقائي»</b> يحسب أبعاد الإطار من صورك (وطول النص إن وُجد)، فيكبر طوليًا كلما زادت الصور بدل تصغيرها وتكديسها.</li><li>مقاسات النشر الجاهزة (4:5، 1:1، 9:16، 16:9، 3:4) مناسبة للمنصات؛ مع التوزيعات الأخرى قد تُقَصّ أطراف الصور، ويمكنك سحب كل صورة داخل خانتها لاختيار الجزء الظاهر.</li><li>الصور الكثيرة (أكثر من 8) أوضح بمقاس تلقائي أو 9:16.</li></ul>"],
 ["📝 النص","<ul><li><b>الصور فقط:</b> إطار صور بلا نص (العنوان والسطر الثاني اختياريان).</li><li><b>النص داخل إطار الصور:</b> يظهر النص تحت الصور في الصورة نفسها.</li><li><b>النص كصورة مستقلة:</b> تحصل على صورتين: إطار الصور وبطاقة نص منفصلة، وتُحمَّلان أو تُشاركان معًا.</li><li>يتسع النص لـ <b>15 سطرًا</b> مع العنوان؛ كل سطر فقرة، ويصغر الخط تلقائيًا عند الحاجة.</li><li><b>التنسيق:</b> حجم الخط، تباعد الأسطر، المحاذاة (بداية/وسط/نهاية)، خط عريض، نقاط، لون النص ولون التمييز.</li></ul>"],
+["🔳 كود QR والهوية","<ul><li>فعّل <b>«إظهار هويتي على التصميم»</b> ثم اكتب اسم مؤسستك أو جمعيتك أو اسمك، وأضف لوجو إن شئت.</li><li>اكتب <b>رابط موقعك أو صفحتك</b> فيُنشأ كود QR يضم الرابط ويظهر أسفل التصميم مع اسمك والرابط مكتوبًا.</li><li>الكود يحمل الرابط فقط، والاسم يُعرض بجانبه للتعريف.</li><li>جرّب مسح الكود بهاتفك قبل النشر للتأكد.</li></ul>"],
 ["🎨 التصميم","<ul><li><b>التوزيع:</b> شبكة، أشرطة، صورة كبيرة بالأعلى أو بالجانب أو بالوسط، فسيفساء…</li><li><b>النمط:</b> 12 نمطًا جاهزًا (ألوان وإطارات وبولارويد…).</li><li><b>الضبط الدقيق:</b> المسافة، الهامش، تدوير الزوايا، الإطار الأبيض، الخلفية بلون أو تدرج، الظل.</li><li><b>التوقيع:</b> لوجو واسم صفحتك أو موقعك في أسفل التصميم (اختياري ويُحفظ على جهازك).</li></ul>"],
 ["✋ تعديل كل صورة","اضغط صورة داخل المعاينة لتحديدها: اسحبها لتحريك الجزء الظاهر، كبّرها أو صغّرها (حتى أصغر من حجمها الأصلي) بالمنزلق أو بإصبعين، واضغط «احتواء» لتظهر كاملة بلا قص، دوّرها، أو غيّر ترتيبها بالسهمين، أو احذفها."],
 ["📤 النشر","حمّل الصور (JPG أخف وPNG أنقى) أو شاركها مباشرة من الهاتف، أو انسخ كل صورة ثم الصقها في المنشور. يمكنك كتابة نص المنشور ونسخه (لا يظهر على الصورة)."],
@@ -273,7 +276,7 @@ function textCol(){if(S.tc)return S.tc;const l=S.grad?(lum(S.bg)+lum(S.bg2))/2:l
 const BRK="collage_brand";const brand={name:"",logo:null,data:"",url:""};
 try{const b=JSON.parse(localStorage.getItem(BRK)||"null");if(b){brand.name=b.name||"";brand.url=b.url||"";if(typeof b.logo==="string"&&b.logo.startsWith("data:image/")){const i=new Image();i.onload=()=>{brand.logo=i;brand.data=b.logo;syncFoot();draw()};i.src=b.logo}}}catch(e){}
 function saveBrand(){try{localStorage.setItem(BRK,JSON.stringify({name:brand.name,url:brand.url,logo:brand.data||""}))}catch(e){}}
-function syncFoot(){const im=$("fLogoPrev");if(brand.logo){im.src=brand.data;im.classList.remove("hidden")}else im.classList.add("hidden");$("fName").value=brand.name}
+function syncFoot(){const im=$("fLogoPrev");if(brand.logo){im.src=brand.data;im.classList.remove("hidden")}else im.classList.add("hidden");$("fName").value=brand.name;$("fUrl").value=brand.url||""}
 
 /* ---------------- layout engine ---------------- */
 const range=(a,b)=>Array.from({length:b-a},(_,i)=>a+i);
@@ -307,7 +310,7 @@ function natural(type,Wc,g,ars,target){const n=ars.length;let best=null;
 const mg=()=>S.frame==="none"?S.margin:Math.max(S.margin,56);
 const noCrop=ty=>ty==="jr"||ty==="jc";
 function plan(type,opt){opt=opt||{};const n=P.length,pol=S.pol,g=pol?Math.max(S.gap,26):S.gap,m=mg();
-  const sig=sigInfo(),ttl=S.title.trim()||(sig.slot?sig.nm:""),hasT=!!ttl,hasS=!!S.sub.trim(),over=S.pstyle==="over"&&!!(S.title.trim()||S.sub.trim()),TL=(hasT&&!over)?titleLay(ttl,W0-2*Math.max(m,40)-(S.pstyle==="badge"?90:0),64,26):null,th=over?0:(TL?TL.h+28:0)+(hasS?58:0),hb=sig.bh+((sig.bh&&th)?14:0)+th,headH=hb?hb+16:0,footH=(footOn()&&!sig.on)?120:0,tb=(S.tmode==="with"&&S.body.trim())?tLayout(W0-2*m-8,36*S.tfs/100,S.fmt!=="auto"?Math.round(W0*FM[S.fmt]*.42):0):null,tbH=tb?tb.h+34:0,ex=2*m+headH+footH+tbH,Wc=W0-2*m;
+  const sig=sigInfo(),ttl=S.title.trim()||(sig.slot?sig.nm:""),hasT=!!ttl,hasS=!!S.sub.trim(),over=S.pstyle==="over"&&!!(S.title.trim()||S.sub.trim()),TL=(hasT&&!over)?titleLay(ttl,W0-2*Math.max(m,40)-(S.pstyle==="badge"?90:0),64,26):null,th=over?0:(TL?TL.h+28:0)+(hasS?58:0),hb=sig.bh+((sig.bh&&th)?14:0)+th,headH=hb?hb+16:0,footH=((footOn()&&!sig.on)?120:0)+(qrOn()?QRH:0),tb=(S.tmode==="with"&&S.body.trim())?tLayout(W0-2*m-8,36*S.tfs/100,S.fmt!=="auto"?Math.round(W0*FM[S.fmt]*.42):0):null,tbH=tb?tb.h+34:0,ex=2*m+headH+footH+tbH,Wc=W0-2*m;
   const fixed=S.fmt!=="auto"?FM[S.fmt]:null,ars=P.map(p=>p.w/p.h);
   let H,rects=[],box;
   if(!n)return{H:Math.round(W0*1.25),rects:[],headH,footH,box:{x:m,y:m+headH,w:Wc,h:200},g,tb:null,tbY:0,sig,ttl,th,hb,over,TL};
@@ -340,6 +343,66 @@ function drawPhoto(c,p,r,i,sc,ui){
 function fitText(c,txt,max,size,min,wt){let s=size;for(;;){c.font=`${wt} ${s}px Cairo,Tahoma,sans-serif`;if(c.measureText(txt).width<=max||s<=min)break;s-=2}return s}
 const mc=document.createElement("canvas").getContext("2d"),tcache={};
 function footOn(){return S.foot&&!!(brand.logo||brand.name.trim())}
+function qrEncode(text){
+  const data=[...new TextEncoder().encode(text)];
+  const ECC=[0,10,16,26,18,24,16,18,22,22,26],NB=[0,1,1,1,2,2,4,4,4,5,5];
+  const raw=v=>{let r=(16*v+128)*v+64;if(v>=2){const a=Math.floor(v/7)+2;r-=(25*a-10)*a-55;if(v>=7)r-=36}return r};
+  const capOf=v=>Math.floor(raw(v)/8)-ECC[v]*NB[v];
+  let ver=1;for(;ver<=10;ver++){if(4+(ver<10?8:16)+data.length*8<=capOf(ver)*8)break}
+  if(ver>10)throw new Error("QR text too long");
+  const cap=capOf(ver),bits=[],put=(v,n)=>{for(let i=n-1;i>=0;i--)bits.push((v>>>i)&1)};
+  put(4,4);put(data.length,ver<10?8:16);data.forEach(b=>put(b,8));put(0,Math.min(4,cap*8-bits.length));
+  while(bits.length%8)bits.push(0);
+  for(let p=0xEC;bits.length<cap*8;p^=0xEC^0x11)put(p,8);
+  const cw=[];for(let i=0;i<bits.length;i+=8){let b=0;for(let j=0;j<8;j++)b=b<<1|bits[i+j];cw.push(b)}
+  const ex=[],lg=[];let x=1;for(let i=0;i<255;i++){ex[i]=x;lg[x]=i;x<<=1;if(x&256)x^=0x11D}
+  const mul=(a,b)=>a&&b?ex[(lg[a]+lg[b])%255]:0;
+  const gen=d=>{let r=[1];for(let i=0;i<d;i++){const n=new Array(r.length+1).fill(0);for(let j=0;j<r.length;j++){n[j]^=r[j];n[j+1]^=mul(r[j],ex[i])}r=n}return r};
+  const rs=(d,n)=>{const g=gen(n),res=new Array(n).fill(0);for(const b of d){const f=b^res.shift();res.push(0);for(let i=0;i<n;i++)res[i]^=mul(g[i+1],f)}return res};
+  const nb=NB[ver],ecl=ECC[ver],tot=Math.floor(raw(ver)/8),ns=nb-tot%nb,sl=Math.floor(tot/nb),blocks=[];
+  for(let i=0,k=0;i<nb;i++){const dl=sl-ecl+(i<ns?0:1),d=cw.slice(k,k+dl);k+=dl;blocks.push({d,e:rs(d,ecl)})}
+  const out=[];for(let i=0;i<sl-ecl+1;i++)blocks.forEach(b=>{if(i<b.d.length)out.push(b.d[i])});
+  for(let i=0;i<ecl;i++)blocks.forEach(b=>out.push(b.e[i]));
+  const size=ver*4+17,m=Array.from({length:size},()=>new Array(size).fill(false)),fn=Array.from({length:size},()=>new Array(size).fill(false));
+  const set=(x,y,v)=>{m[y][x]=v;fn[y][x]=true};
+  for(let i=0;i<size;i++){set(6,i,i%2==0);set(i,6,i%2==0)}
+  for(const [cx,cy] of [[3,3],[size-4,3],[3,size-4]])for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const xx=cx+dx,yy=cy+dy;if(xx>=0&&xx<size&&yy>=0&&yy<size){const d=Math.max(Math.abs(dx),Math.abs(dy));set(xx,yy,d!=2&&d!=4)}}
+  if(ver>1){const na=Math.floor(ver/7)+2,step=Math.floor((ver*4+na*2+1)/(na*2-2))*2,pos=[6];for(let p=size-7;pos.length<na;p-=step)pos.splice(1,0,p);
+    for(let i=0;i<na;i++)for(let j=0;j<na;j++){if((i==0&&j==0)||(i==0&&j==na-1)||(i==na-1&&j==0))continue;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)set(pos[i]+dx,pos[j]+dy,Math.max(Math.abs(dx),Math.abs(dy))!=1)}}
+  const fmt=mask=>{const d=mask;let r=d;for(let i=0;i<10;i++)r=(r<<1)^((r>>>9)*0x537);const b=((d<<10)|r)^0x5412,g=i=>((b>>>i)&1)==1;
+    for(let i=0;i<=5;i++)set(8,i,g(i));set(8,7,g(6));set(8,8,g(7));set(7,8,g(8));for(let i=9;i<15;i++)set(14-i,8,g(i));
+    for(let i=0;i<8;i++)set(size-1-i,8,g(i));for(let i=8;i<15;i++)set(8,size-15+i,g(i));set(8,size-8,true)};
+  fmt(0);
+  if(ver>=7){let r=ver;for(let i=0;i<12;i++)r=(r<<1)^((r>>>11)*0x1F25);const b=(ver<<12)|r;for(let i=0;i<18;i++){const v=((b>>>i)&1)==1,a=size-11+i%3,c=Math.floor(i/3);set(a,c,v);set(c,a,v)}}
+  let bi=0;for(let right=size-1;right>=1;right-=2){if(right==6)right=5;for(let v=0;v<size;v++)for(let j=0;j<2;j++){const xx=right-j,up=((right+1)&2)==0,yy=up?size-1-v:v;if(!fn[yy][xx]&&bi<out.length*8){m[yy][xx]=((out[bi>>>3]>>>(7-(bi&7)))&1)==1;bi++}}}
+  const MK=[(x,y)=>(x+y)%2==0,(x,y)=>y%2==0,(x,y)=>x%3==0,(x,y)=>(x+y)%3==0,(x,y)=>(Math.floor(x/3)+Math.floor(y/2))%2==0,(x,y)=>x*y%2+x*y%3==0,(x,y)=>(x*y%2+x*y%3)%2==0,(x,y)=>((x+y)%2+x*y%3)%2==0];
+  const apply=k=>{for(let y=0;y<size;y++)for(let xx=0;xx<size;xx++)if(!fn[y][xx]&&MK[k](xx,y))m[y][xx]=!m[y][xx]};
+  const pen=()=>{let p=0;for(let t=0;t<2;t++)for(let a=0;a<size;a++){let run=1;for(let b=1;b<size;b++){const c=t?m[b][a]:m[a][b],pr=t?m[b-1][a]:m[a][b-1];if(c==pr){run++;if(run==5)p+=3;else if(run>5)p++}else run=1}}
+    for(let y=0;y<size-1;y++)for(let xx=0;xx<size-1;xx++){const c=m[y][xx];if(c==m[y][xx+1]&&c==m[y+1][xx]&&c==m[y+1][xx+1])p+=3}
+    let dk=0;m.forEach(r=>r.forEach(c=>{if(c)dk++}));return p+Math.floor(Math.abs(dk*20-size*size*10)/(size*size))*10};
+  let best=0,bp=1e9;for(let k=0;k<8;k++){apply(k);fmt(k);const p=pen();if(p<bp){bp=p;best=k}apply(k)}
+  apply(best);fmt(best);return{size,m};
+}
+const QRH=230;
+function normUrl(v){v=(v||"").trim();if(!v||/\s/.test(v))return"";if(!/^[a-z][a-z0-9+.-]*:/i.test(v))v="https://"+v;return v}
+function qrData(){return normUrl(brand.url)}
+let qrC={u:"",q:null};
+function qrGet(u){if(qrC.u!==u){qrC={u,q:null};try{qrC.q=qrEncode(u)}catch(e){qrC.q=null}}return qrC.q}
+function qrOn(){return S.foot&&!!qrData()&&!!qrGet(qrData())}
+function drawQrStrip(c,H,tc,m){const u=qrData(),q=qrGet(u);if(!q)return;const pad=Math.max(m,40),cx=pad,cw=W0-2*pad,ch=QRH-44,cy=H-QRH+10;
+  c.save();c.shadowColor="rgba(0,0,0,.18)";c.shadowBlur=14;c.shadowOffsetY=4;c.fillStyle="#fff";rr(c,cx,cy,cw,ch,24);c.fill();c.restore();
+  const side=ch-28,qx=cx+cw-14-side,qy=cy+14,n=q.size,mod=side/(n+4);
+  c.fillStyle="#fff";c.fillRect(qx,qy,side,side);c.fillStyle="#0b1b2e";
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.m[y][x])c.fillRect(Math.round(qx+(x+2)*mod),Math.round(qy+(y+2)*mod),Math.ceil(mod),Math.ceil(mod));
+  const tx=qx-22,tw=cw-side-14-22-28,nm=brand.name.trim(),disp=u.replace(/^https?:\/\//i,"").replace(/\/$/,"");
+  c.save();c.textBaseline="alphabetic";c.textAlign="right";c.direction="ltr";
+  let lines=[],ns=0,nlh=0;
+  if(nm){const F=z=>mc.font=`800 ${z}px Cairo,Tahoma,sans-serif`;for(let z=38;z>=22;z-=2){F(z);lines=wrapT(nm,tw);if(lines.length<=2)break}ns=mc.font&&parseInt(mc.font.match(/(\d+)px/)[1]);if(lines.length>2){lines=lines.slice(0,2);lines[1]=lines[1].replace(/\s*\S*$/,"")+"…"}nlh=Math.round(ns*1.3)}
+  const ls=fitText(c,disp,tw,26,13,700),hs=22,total=lines.length*nlh+(lines.length?10:0)+ls+14+hs;let y=cy+ch/2-total/2;
+  if(lines.length){c.font=`800 ${ns}px Cairo,Tahoma,sans-serif`;c.fillStyle="#0b1b2e";for(const l of lines){y+=nlh*.8;c.fillText(l,tx,y);y+=nlh*.2}y+=10}
+  y+=ls*.8;c.font=`700 ${ls}px Cairo,Tahoma,sans-serif`;c.fillStyle="#1a5fb4";c.fillText(disp,tx,y);y+=ls*.2+14+hs*.8;
+  c.font=`600 ${hs}px Cairo,Tahoma,sans-serif`;c.fillStyle="#5b6b7d";c.fillText(t("qrHint"),tx,y);c.restore()}
+function drawBottom(c,footH,H,tc,sc,m){const qh=qrOn()?QRH:0;drawFoot(c,footH-qh,H-qh,tc,sc,m);if(qh)drawQrStrip(c,H,tc,m)}
 const SR=46;
 function perim(c,inset,step,H,fn){for(let x=inset;x<=W0-inset+.1;x+=step){fn(x,inset);fn(x,H-inset)}for(let y=inset+step;y<=H-inset-step+.1;y+=step){fn(inset,y);fn(W0-inset,y)}}
 function drawFrame(c,H,sc){const f=S.frame;if(f==="none")return;const col=S.fcol;c.save();
@@ -390,7 +453,7 @@ function drawText(c,L,x,y,w,col,acc){c.save();c.fillStyle=col;c.textBaseline="al
 function bgFill(c,H){if(S.grad){const g=c.createLinearGradient(0,0,W0*.6,H);g.addColorStop(0,S.bg);g.addColorStop(1,S.bg2);c.fillStyle=g}else c.fillStyle=S.bg;c.fillRect(0,0,W0,H)}
 function textPlan(){const pad=Math.max(mg(),48),w=W0-2*pad,sig=sigInfo(),ttl=S.title.trim()||(sig.slot?sig.nm:""),hasS=!!S.sub.trim();
   const tl=ttl?titleLay(ttl,w,64,28):null;
-  const headH=tl?tl.h+44:0,subH=hasS?60:0,zone=sig.bh+((sig.bh&&(headH+subH))?14:0)+headH+subH,footH=(footOn()&&!sig.on)?120:0,fixed=S.fmt!=="auto"?Math.round(W0*FM[S.fmt]):0,gap=zone?20:0,cap=fixed||4300;
+  const headH=tl?tl.h+44:0,subH=hasS?60:0,zone=sig.bh+((sig.bh&&(headH+subH))?14:0)+headH+subH,footH=((footOn()&&!sig.on)?120:0)+(qrOn()?QRH:0),fixed=S.fmt!=="auto"?Math.round(W0*FM[S.fmt]):0,gap=zone?20:0,cap=fixed||4300;
   const L=S.body.trim()?tLayout(w,40*S.tfs/100,cap-(pad*2+zone+gap+footH)):{paras:[],fs:40,lh:60,ind:0,h:0};
   const content=zone+gap+(S.pstyle==="band"&&zone>0?36:0)+L.h,H=fixed||Math.max(760,Math.min(4300,Math.round(pad*2+content+footH)));
   return{pad,w,tl,headH,subH,zone,gap,footH,L,H,content,sig}}
@@ -402,7 +465,7 @@ function sceneText(c,sc,tp){const H=tp.H,pad=tp.pad,sg=tp.sig,rtl=lang==="ar";c.
   if(tp.tl){const T=tp.tl;c.fillStyle=tcT;c.textAlign="center";c.font=`800 ${T.s}px Cairo,Tahoma,sans-serif`;T.lines.forEach((ln,i)=>c.fillText(ln,cxT,yt+T.s*.9+i*T.lh));
     c.fillStyle=S.acc;rr(c,cxT-70,yt+T.h+10,140,8,4);c.fill();yt+=tp.headH}
   if(tp.subH){c.fillStyle=tcT;c.globalAlpha=.85;c.textAlign="center";const s=fitText(c,S.sub.trim(),wT,34,18,600);c.fillText(S.sub.trim(),cxT,yt+s*.95+4);c.globalAlpha=1}
-  y=z0+tp.zone+tp.gap+(band?36:0);drawText(c,tp.L,pad,y,tp.w,tc,S.acc);drawFoot(c,tp.footH,H,textCol(),sc,pad);c.restore()}
+  y=z0+tp.zone+tp.gap+(band?36:0);drawText(c,tp.L,pad,y,tp.w,tc,S.acc);drawBottom(c,tp.footH,H,textCol(),sc,pad);c.restore()}
 function scene(c,sc,ui){const pl=plan(S.layout),H=pl.H;c.save();c.scale(sc,sc);
   bgFill(c,H);drawFrame(c,H,sc);
   const tc=textCol(),m=mg();c.fillStyle=tc;c.textAlign="center";c.textBaseline="alphabetic";
@@ -426,7 +489,7 @@ function scene(c,sc,ui){const pl=plan(S.layout),H=pl.H;c.save();c.scale(sc,sc);
     c.restore()}
   if(ui&&S.sel>=0&&pl.rects[S.sel]){const r=pl.rects[S.sel];c.save();c.lineWidth=5;c.setLineDash([16,10]);c.strokeStyle="#ff5a36";rr(c,r.x+3,r.y+3,r.w-6,r.h-6,S.radius);c.stroke();c.restore()}
   if(pl.tb)drawText(c,pl.tb,m+4,pl.tbY,W0-2*m-8,S.tcol||tc,S.acc);
-  drawFoot(c,pl.footH,H,tc,sc,m);
+  drawBottom(c,pl.footH,H,tc,sc,m);
   c.restore();return H}
 const cv=$("cv"),cx=cv.getContext("2d");
 const cv2=$("cv2"),cx2=cv2.getContext("2d");
@@ -459,10 +522,11 @@ $("oShadow").onchange=e=>upd(()=>S.shadow=e.target.checked);$("oPol").onchange=e
 function buildSig(){$("sigpos").innerHTML=[["top","sigTop"],["bottom","sigBot"]].map(([k,n])=>`<span class="chip${k===S.sigpos?" on":""}" data-k="${k}">${t(n)}</span>`).join("")}
 $("sigpos").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;S.sigpos=c.dataset.k;buildSig();draw();thumbs()};
 $("oFoot").onchange=e=>upd(()=>{S.foot=e.target.checked;$("footBox").classList.toggle("hidden",!S.foot)});
+$("fUrl").oninput=e=>{brand.url=e.target.value;saveBrand();draw()};
 $("fName").oninput=e=>{brand.name=e.target.value;saveBrand();draw()};
 $("fLogoBtn").onclick=()=>$("fLogoFile").click();
 $("fLogoFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,512/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);brand.data=c.toDataURL("image/png");const im=new Image();im.onload=()=>{brand.logo=im;saveBrand();syncFoot();draw()};im.src=brand.data};i.src=r.result};r.readAsDataURL(f);e.target.value=""};
-$("fReset").onclick=()=>{brand.logo=null;brand.data="";brand.name="";saveBrand();syncFoot();draw()};
+$("fReset").onclick=()=>{brand.logo=null;brand.data="";brand.name="";brand.url="";saveBrand();syncFoot();draw()};
 
 /* ---------------- photos ---------------- */
 async function decode(f){
